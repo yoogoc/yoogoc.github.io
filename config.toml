@@ -1,5 +1,0 @@
-theme = "cactus"
-
-baseURL = "https://blog.yoogo.top/"
-languageCode = "zh-CN"
-title = "My New Hugo Site"
