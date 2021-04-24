@@ -1,5 +1,5 @@
 theme = "cactus"
 
-baseURL = "http://example.org/"
+baseURL = "https://yoogoc.github.io/"
 languageCode = "en-us"
 title = "My New Hugo Site"
