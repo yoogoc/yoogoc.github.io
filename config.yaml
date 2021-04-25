@@ -98,7 +98,7 @@ params:
   # profile
   profile:
     enabled: true # Whether to show profile bar
-    avatar: avatar.png
+    avatar: sites-images/Avatar200.png
     gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
     author: yoogo
     author_title: emmmmming
