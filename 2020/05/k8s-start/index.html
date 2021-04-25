@@ -1,0 +1,173 @@
+<!doctype html><html lang=zh><head><title>ubuntu下k8s安装 - yoogo</title><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="base: 在主机、和节点需要执行（保证虚拟机/物理机内网地址稳定） sudo vim /etc/hostname # k8s-xx，目的：看起来好看 sudo vim /etc/hosts # x.x.x.x k8s-xx，目的：爽 sudo vim /etc/fstab # 将s"><meta name=generator content="Hugo 0.82.1 with theme pure"><title>ubuntu下k8s安装 - yoogo</title><link rel=stylesheet href=https://blog.yoogo.top/css/style.min.6f90022f237877ae2514ec95f3c9cca9f2314394f20800ca037a497e20053122.css><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:title" content="ubuntu下k8s安装"><meta property="og:description" content="base: 在主机、和节点需要执行（保证虚拟机/物理机内网地址稳定） sudo vim /etc/hostname # k8s-xx，目的：看起来好看 sudo vim /etc/hosts # x.x.x.x k8s-xx，目的：爽 sudo vim /etc/fstab # 将s"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yoogo.top/2020/05/k8s-start/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-05-20T22:06:00+00:00"><meta property="article:modified_time" content="2020-05-20T22:06:00+00:00"><meta itemprop=name content="ubuntu下k8s安装"><meta itemprop=description content="base: 在主机、和节点需要执行（保证虚拟机/物理机内网地址稳定） sudo vim /etc/hostname # k8s-xx，目的：看起来好看 sudo vim /etc/hosts # x.x.x.x k8s-xx，目的：爽 sudo vim /etc/fstab # 将s"><meta itemprop=datePublished content="2020-05-20T22:06:00+00:00"><meta itemprop=dateModified content="2020-05-20T22:06:00+00:00"><meta itemprop=wordCount content="912"><meta itemprop=keywords content="k8s,"><meta name=twitter:card content="summary"><meta name=twitter:title content="ubuntu下k8s安装"><meta name=twitter:description content="base: 在主机、和节点需要执行（保证虚拟机/物理机内网地址稳定） sudo vim /etc/hostname # k8s-xx，目的：看起来好看 sudo vim /etc/hosts # x.x.x.x k8s-xx，目的：爽 sudo vim /etc/fstab # 将s"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body class="main-center theme-black" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/yoogoc target=_blank><img class="img-circle img-rotate" src=https://blog.yoogo.top/avatar.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">yoogo</h2><h3 id=title class="hidden-xs hidden-sm hidden-md">emmmmming</h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>广州</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick=return!1><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i>
+<span class=menu-title>Home</span></a></li><li class="menu-item menu-item-archives"><a href=/posts/><i class="icon icon-archives-fill"></i>
+<span class=menu-title>Archives</span></a></li><li class="menu-item menu-item-categories"><a href=/categories/><i class="icon icon-folder"></i>
+<span class=menu-title>Categories</span></a></li><li class="menu-item menu-item-tags"><a href=/tags/><i class="icon icon-tags"></i>
+<span class=menu-title>Tags</span></a></li><li class="menu-item menu-item-about"><a href=/about/><i class="icon icon-cup-fill"></i>
+<span class=menu-title>About</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>标签</h3><div id=tag-cloud-list class=widget-body><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link rel=1>cloudnative<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link rel=5>devops<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link rel=1>dns<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link rel=1>editor<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/git/ class=tag-list-link rel=5>git<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=5>go<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link rel=1>greatwall<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link rel=1>hexo<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link rel=1>iam<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/java/ class=tag-list-link rel=8>java<span class=tag-list-count>8</span></a>
+<a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link rel=11>k8s<span class=tag-list-count>11</span></a>
+<a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link rel=5>linux<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link rel=1>mac<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link rel=1>markdown<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/os/ class=tag-list-link rel=2>os<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link rel=5>rails<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>体系结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link rel=1>工作流<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>数据结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link rel=1>正则<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link rel=2>计算思维<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link rel=1>计算机网络<span class=tag-list-count>1</span></a></div><script>document.onreadystatechange=()=>{document.readyState==='complete'&&tagCloud('#tag-cloud-list a',8,20)};function tagCloud(c,d,e){let b=0,a=0;$(c).each(function(){let c=Number($(this).attr("rel"));b<c&&(b=c),(a>c||a==0)&&(a=c)});let f=(e-d)/(b-a);$(c).each(function(){let b=$(this).attr("rel")-a;$(this).css({"font-size":d+b*f+'px'})})}</script></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link>cloudnative</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link>devops</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link>dns</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link>editor</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/git/ class=tag-list-link>git</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link>greatwall</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link>iam</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/java/ class=tag-list-link>java</a><span class=tag-list-count>8</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link>k8s</a><span class=tag-list-count>11</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link>mac</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link>markdown</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/os/ class=tag-list-link>os</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link>rails</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link>体系结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link>工作流</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link>数据结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link>正则</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link>计算思维</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link>计算机网络</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ class=title>kubeadm部署k8s(todo)</a></p><p class=item-date><time datetime="2021-04-18 15:57:00 +0000 UTC" itemprop=datePublished>2021-04-18</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/04/scim%E6%A6%82%E8%BF%B0/ class=title>scim 翻译</a></p><p class=item-date><time datetime="2021-04-16 16:19:00 +0000 UTC" itemprop=datePublished>2021-04-16</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/04/jenkins/ class=title>jenkins</a></p><p class=item-date><time datetime="2021-04-11 21:50:00 +0000 UTC" itemprop=datePublished>2021-04-11</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/03/coredns-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/ class=title>coredns-启动流程</a></p><p class=item-date><time datetime="2021-03-08 22:42:00 +0000 UTC" itemprop=datePublished>2021-03-08</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/01/tcp%E5%AD%A6%E4%B9%A0/ class=title>tcp学习</a></p><p class=item-date><time datetime="2021-01-16 16:58:00 +0000 UTC" itemprop=datePublished>2021-01-16</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2020/05/k8s-start/>ubuntu下k8s安装</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=https://blog.yoogo.top/2020/05/k8s-start/ class=article-date><time datetime="2020-05-20 22:06:00 +0000 UTC" itemprop=datePublished>2020-05-20</time></a></span>
+<span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/k8s/>k8s</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 912字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 2分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><h2 id=base-在主机和节点需要执行保证虚拟机物理机内网地址稳定>base: 在主机、和节点需要执行（保证虚拟机/物理机内网地址稳定）</h2><pre><code class=language-shell>sudo vim /etc/hostname # k8s-xx，目的：看起来好看
+sudo vim /etc/hosts # x.x.x.x k8s-xx，目的：爽
+sudo vim /etc/fstab  # 将swap注释掉，目的：禁用交换分区
+sudo reboot -h
+</code></pre><h2 id=docker>docker</h2><pre><code class=language-shell>sudo apt install docker.io
+sudo vi /etc/docker/daemon.json
+</code></pre><h4 id=加速docker>加速docker</h4><p>执行<code>sudo vi /etc/docker/daemon.json</code> 输入：</p><blockquote><p>自己去<a href=https://cr.console.aliyun.com/>阿里云容器镜像服务</a>申请自己的加速地址</p></blockquote><pre><code class=language-json>{
+  &quot;registry-mirrors&quot;: [
+    &quot;https://docker.mirrors.ustc.edu.cn&quot;,
+    &quot;http://hub-mirror.c.163.com&quot;
+  ],
+  &quot;max-concurrent-downloads&quot;: 10,
+  &quot;log-driver&quot;: &quot;json-file&quot;,
+  &quot;log-level&quot;: &quot;warn&quot;,
+  &quot;log-opts&quot;: {
+    &quot;max-size&quot;: &quot;10m&quot;,
+    &quot;max-file&quot;: &quot;3&quot;
+    },
+  &quot;data-root&quot;: &quot;/var/lib/docker&quot;
+}
+</code></pre><pre><code class=language-shell>sudo systemctl daemon-reload
+sudo systemctl restart docker
+sudo systemctl enable docker
+</code></pre><h2 id=安装-kubeadmkubelet-和-kubectl>安装 kubeadm、kubelet 和 kubectl</h2><pre><code class=language-shell>sudo apt-get update &amp;&amp; sudo apt-get install -y apt-transport-https curl
+# 国内不能用curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+# cat &lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+# deb https://apt.kubernetes.io/ kubernetes-xenial main
+# EOF
+cat &lt;&lt;EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+EOF
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+</code></pre><h2 id=init-master>init master</h2><p>坑点：</p><ol><li>Init 需要拉镜像，网上的例子有好多竟然是把镜像拉下来然后retag解决，着实不优雅，换个镜像地址就搞定了</li><li>阿里云可能同步的没有那么快，可以通过手动指定版本解决，事实上生产环境也不会去拉latest</li></ol><pre><code class=language-shell># apiserver-advertise-address 更换成自己局域网地址
+sudo kubeadm init \
+--apiserver-advertise-address=192.168.1.220 \
+--image-repository registry.cn-hangzhou.aliyuncs.com/google_containers \
+--pod-network-cidr=10.244.0.0/16 \
+--ignore-preflight-errors=NumCPU \
+--kubernetes-version=v1.18.3
+# 安装成功以后在worker节点执行：
+sudo kubeadm join 192.168.1.220:6443 --token pck7jp.l1l0oq33ue8c40eq \
+    --discovery-token-ca-cert-hash sha256:e4f6763e5a9a2d7aa290cf6380a5ee3000ed2a367ca81a373d66308fef44cd36
+</code></pre><h3 id=config-kubectl>config kubectl</h3><pre><code class=language-shell>mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre><h3 id=config-network>config network</h3><pre><code class=language-shell>kubectl apply -f https://docs.projectcalico.org/v3.15/manifests/calico.yaml
+</code></pre><h3 id=lb>lb</h3><pre><code>ansible-playbook roles/ex-lb/ex-lb.yml
+</code></pre><h3 id=rancher>rancher</h3><pre><code class=language-bash># rancher 2.5以后会自启一个k3s单节点，因此必须要开特权模式
+sudo docker run -d --restart=unless-stopped \
+-p 80:80 -p 443:443 \
+-v /var/lib/rancher/:/var/lib/rancher/ \
+-v /root/var/log/auditlog:/var/log/auditlog \
+-e CATTLE_SYSTEM_CATALOG=bundled \
+-e AUDIT_LEVEL=3 \
+--name rancher \
+--privileged=true \
+rancher/rancher
+
+rm -rf /var/lib/rancher/ &amp;&amp; rm -rf /root/var/log/auditlog
+</code></pre><h1 id=ansible安装>ansible安装</h1><ol><li>不能通过二进制安装docker，<a href=https://github.com/easzlab/kubeasz/issues/848>issues</a></li></ol><pre><code class=language-shell>vim /etc/ssh/sshd_config
+service ssh restart
+ssh-keygen -t rsa -b 2048 -N '' -f ~/.ssh/id_rsa
+ssh-copy-id $IPs #$IPs为所有节点地址包括自身，按照提示输入yes 和root密码
+curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+python get-pip.py
+
+export release=2.2.1
+curl -C- -fLO --retry 3 https://github.com/easzlab/kubeasz/releases/download/${release}/easzup
+chmod +x ./easzup
+./easzup -D
+</code></pre><p>helm</p><pre><code class=language-shell>curl https://helm.baltorepo.com/organization/signing.asc | sudo apt-key add -
+sudo apt-get install apt-transport-https --yes
+echo &quot;deb https://baltocdn.com/helm/stable/debian/ all main&quot; | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+# 或者
+wget https://get.helm.sh/helm-v3.2.1-linux-amd64.tar.gz # 自己去找版本号
+mv ./linux-amd64/helm /usr/bin
+</code></pre><h2 id=debug>debug</h2><ol><li>网络、dns</li></ol><pre><code>kubectl run -it --rm --restart=Never --image=busybox busybox
+kubectl run -it --rm --restart=Never --image=infoblox/dnstools:latest dnstools
+
+=&gt; nslookup kubernetes.default.svc.cluster.local
+</code></pre><h2 id=k3s>k3s</h2><p>占用资源少，但是坑还是很多的，亮点是使用sqlite代替etcd,以及自带local storage class，一定要看安装指南，不然都不知道坑（feature）是哪里来的，比如Service Load Balancer（slb）</p><p><a href=https://rancher.com/docs/k3s/latest/en/networking/>https://rancher.com/docs/k3s/latest/en/networking/</a></p><p><a href=https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/>https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/</a></p><h3 id=quick-start>Quick start</h3><pre><code class=language-shell>curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=&quot;--disable=servicelb&quot; sh -
+</code></pre><p>如果网络不好可以先将二进制k3s下载至本地</p><pre><code class=language-shell># 自己修改指定的版本号
+wget https://github.com/rancher/k3s/releases/download/v1.20.4%2Bk3s1/k3s
+chmod 755 k3s &amp; mv k3s /usr/local/bin/
+curl -sfL https://get.k3s.io | INSTALL_K3S_SKIP_DOWNLOAD=true sh -
+cp /var/lib/rancher/k3s/agent/etc/containerd/config.toml /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+cat &gt;&gt; /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl &lt;&lt; EOF
+[plugins.cri.registry.mirrors]
+
+[plugins.cri.registry.mirrors.&quot;docker.io&quot;]
+  endpoint = [&quot;https://30l6yhjq.mirror.aliyuncs.com&quot;, &quot;https://docker.mirrors.ustc.edu.cn&quot;]
+EOF
+
+systemctl restart k3s
+cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+
+cat /var/lib/rancher/k3s/server/node-token
+</code></pre><pre><code class=language-sh># cri 加速
+cat &gt;&gt; /etc/rancher/k3s/registries.yaml &lt;&lt;EOF
+mirrors:
+  &quot;docker.io&quot;:
+    endpoint:
+    	- &quot;https://30l6yhjq.mirror.aliyuncs.com&quot;
+    - &quot;https://docker.mirrors.ustc.edu.cn&quot;
+EOF
+systemctl restart k3s
+
+
+</code></pre><h3 id=add-node>Add node</h3><pre><code class=language-shell>curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh |
+INSTALL_K3S_MIRROR=cn K3S_URL=https://192.168.1.91:6443 K3S_TOKEN=K10f5c3ae2cd90c834a10eae8cee2225e5b9b250d64187ffd235552b77b14da365f::server:903e9a1b0b622a686dfa85710f09c848 sh -
+
+cp /var/lib/rancher/k3s/agent/etc/containerd/config.toml /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl
+cat &gt;&gt; /var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl &lt;&lt; EOF
+[plugins.cri.registry.mirrors]
+
+[plugins.cri.registry.mirrors.&quot;docker.io&quot;]
+  endpoint = [&quot;https://30l6yhjq.mirror.aliyuncs.com&quot;, &quot;https://docker.mirrors.ustc.edu.cn&quot;]
+EOF
+systemctl restart k3s-agent.service
+</code></pre></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接:</strong>
+<a href=https://blog.yoogo.top/2020/05/k8s-start/ title=ubuntu下k8s安装 target=_blank rel=external>https://blog.yoogo.top/2020/05/k8s-start/</a></li><li class=post-copyright-license><strong>License:</strong>
+<a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>CC BY 4.0 CN</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/yoogoc target=_blank class="img-burn thumb-sm visible-lg"><img src=https://blog.yoogo.top/avatar.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/yoogoc target=_blank><span class=text-dark>yoogo</span><small class=ml-1x>emmmmming</small></a></h3><div>emmmmm</div></div></figure></div></div></div></article></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=https://blog.yoogo.top/2020/05/spring%E7%9F%A5%E8%AF%86%E7%82%B9%E8%AE%B0%E5%BD%95/ title=spring知识点记录><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=next><a href=https://blog.yoogo.top/2020/05/k8s-learn/ title=k8s基本操作><span>上一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden=true></i></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i>
+<i class="text-in icon icon-close"></i>
+<span>]</span></a></li></ul><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/yoogoc target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=https://blog.yoogo.top/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li></ul><div class=copyright>&copy;2018 -
+2021<div class=publishby>Theme by <a href=https://github.com/xiaoheiAh target=_blank>xiaoheiAh </a>base on<a href=https://github.com/xiaoheiAh/hugo-theme-pure target=_blank> pure</a>.</div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script><script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script><script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js defer></script><script>hljs.configure({tabReplace:'    ',classPrefix:''}),hljs.initHighlightingOnLoad()</script><script src=https://blog.yoogo.top/js/application.min.a94ab19cb63a95c8d7fbd7b85cab3ddeea8c369bdf75b9cab6708787ead123af.js></script><script src=https://blog.yoogo.top/js/plugin.min.19c5bcb2fb0789ab4f2b7834e5ceb5e92635645605bab902c1024b25f1502364.js></script><script>(function(a){var b={TRANSLATION:{POSTS:'文章',PAGES:'页面',CATEGORIES:'分类',TAGS:'标签',UNTITLED:'(未命名)'},ROOT_URL:'https://blog.yoogo.top/',CONTENT_URL:'https://blog.yoogo.top//searchindex.json '};a.INSIGHT_CONFIG=b})(window)</script><script type=text/javascript src=https://blog.yoogo.top/js/insight.min.4a2d52de4bfff73e0c688404fe3d17c9a3ae12d9888e1e1ac9c690e4890de2ded50fe55f2b819c2ba55435a76f396f3ea6805765f0b0af5635cdf74ea459eab0.js defer></script><script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script><script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:!0})</script></body></html>

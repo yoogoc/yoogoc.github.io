@@ -1,0 +1,765 @@
+<!doctype html><html lang=zh><head><title>二进制安装k8s - yoogo</title><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="requirment 生产环境的部署Kubernetes集群方案 kubeadm Kubeadm是一个K8s部署工具，提供kubeadm init和kubeadm join，用于快"><meta name=generator content="Hugo 0.82.1 with theme pure"><title>二进制安装k8s - yoogo</title><link rel=stylesheet href=https://blog.yoogo.top/css/style.min.6f90022f237877ae2514ec95f3c9cca9f2314394f20800ca037a497e20053122.css><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:title" content="二进制安装k8s"><meta property="og:description" content="requirment 生产环境的部署Kubernetes集群方案 kubeadm Kubeadm是一个K8s部署工具，提供kubeadm init和kubeadm join，用于快"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yoogo.top/2020/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85k8s/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-08-19T09:54:00+00:00"><meta property="article:modified_time" content="2020-08-19T09:54:00+00:00"><meta itemprop=name content="二进制安装k8s"><meta itemprop=description content="requirment 生产环境的部署Kubernetes集群方案 kubeadm Kubeadm是一个K8s部署工具，提供kubeadm init和kubeadm join，用于快"><meta itemprop=datePublished content="2020-08-19T09:54:00+00:00"><meta itemprop=dateModified content="2020-08-19T09:54:00+00:00"><meta itemprop=wordCount content="2543"><meta itemprop=keywords content="k8s,"><meta name=twitter:card content="summary"><meta name=twitter:title content="二进制安装k8s"><meta name=twitter:description content="requirment 生产环境的部署Kubernetes集群方案 kubeadm Kubeadm是一个K8s部署工具，提供kubeadm init和kubeadm join，用于快"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body class="main-center theme-black" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/yoogoc target=_blank><img class="img-circle img-rotate" src=https://blog.yoogo.top/avatar.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">yoogo</h2><h3 id=title class="hidden-xs hidden-sm hidden-md">emmmmming</h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>广州</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick=return!1><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i>
+<span class=menu-title>Home</span></a></li><li class="menu-item menu-item-archives"><a href=/posts/><i class="icon icon-archives-fill"></i>
+<span class=menu-title>Archives</span></a></li><li class="menu-item menu-item-categories"><a href=/categories/><i class="icon icon-folder"></i>
+<span class=menu-title>Categories</span></a></li><li class="menu-item menu-item-tags"><a href=/tags/><i class="icon icon-tags"></i>
+<span class=menu-title>Tags</span></a></li><li class="menu-item menu-item-about"><a href=/about/><i class="icon icon-cup-fill"></i>
+<span class=menu-title>About</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>标签</h3><div id=tag-cloud-list class=widget-body><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link rel=1>cloudnative<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link rel=5>devops<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link rel=1>dns<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link rel=1>editor<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/git/ class=tag-list-link rel=5>git<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=5>go<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link rel=1>greatwall<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link rel=1>hexo<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link rel=1>iam<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/java/ class=tag-list-link rel=8>java<span class=tag-list-count>8</span></a>
+<a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link rel=11>k8s<span class=tag-list-count>11</span></a>
+<a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link rel=5>linux<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link rel=1>mac<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link rel=1>markdown<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/os/ class=tag-list-link rel=2>os<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link rel=5>rails<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>体系结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link rel=1>工作流<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>数据结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link rel=1>正则<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link rel=2>计算思维<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link rel=1>计算机网络<span class=tag-list-count>1</span></a></div><script>document.onreadystatechange=()=>{document.readyState==='complete'&&tagCloud('#tag-cloud-list a',8,20)};function tagCloud(c,d,e){let b=0,a=0;$(c).each(function(){let c=Number($(this).attr("rel"));b<c&&(b=c),(a>c||a==0)&&(a=c)});let f=(e-d)/(b-a);$(c).each(function(){let b=$(this).attr("rel")-a;$(this).css({"font-size":d+b*f+'px'})})}</script></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link>cloudnative</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link>devops</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link>dns</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link>editor</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/git/ class=tag-list-link>git</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link>greatwall</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link>iam</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/java/ class=tag-list-link>java</a><span class=tag-list-count>8</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link>k8s</a><span class=tag-list-count>11</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link>mac</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link>markdown</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/os/ class=tag-list-link>os</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link>rails</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link>体系结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link>工作流</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link>数据结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link>正则</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link>计算思维</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link>计算机网络</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ class=title>kubeadm部署k8s(todo)</a></p><p class=item-date><time datetime="2021-04-18 15:57:00 +0000 UTC" itemprop=datePublished>2021-04-18</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/04/scim%E6%A6%82%E8%BF%B0/ class=title>scim 翻译</a></p><p class=item-date><time datetime="2021-04-16 16:19:00 +0000 UTC" itemprop=datePublished>2021-04-16</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/04/jenkins/ class=title>jenkins</a></p><p class=item-date><time datetime="2021-04-11 21:50:00 +0000 UTC" itemprop=datePublished>2021-04-11</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/03/coredns-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/ class=title>coredns-启动流程</a></p><p class=item-date><time datetime="2021-03-08 22:42:00 +0000 UTC" itemprop=datePublished>2021-03-08</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/01/tcp%E5%AD%A6%E4%B9%A0/ class=title>tcp学习</a></p><p class=item-date><time datetime="2021-01-16 16:58:00 +0000 UTC" itemprop=datePublished>2021-01-16</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2020/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85k8s/>二进制安装k8s</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=https://blog.yoogo.top/2020/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85k8s/ class=article-date><time datetime="2020-08-19 09:54:00 +0000 UTC" itemprop=datePublished>2020-08-19</time></a></span>
+<span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/k8s/>k8s</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 2543字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 6分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><h1 id=requirment>requirment</h1><h3 id=生产环境的部署kubernetes集群方案>生产环境的部署Kubernetes集群方案</h3><ol><li>kubeadm</li></ol><p>Kubeadm是一个K8s部署工具，提供kubeadm init和kubeadm join，用于快速部署Kubernetes集群。</p><p>官方地址：https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/</p><ol start=2><li>kubeasz</li></ol><p>国内大佬开源的使用Ansible脚本安装K8S集群，方便直接，不受国内网络环境影响</p><p>github地址：https://github.com/easzlab/kubeasz</p><ol start=3><li>二进制包编译安装</li></ol><p>从github下载发行版的二进制包，手动部署每个组件，组成Kubernetes集群。</p><p>上述两种方式虽然降低部署门槛，但屏蔽了很多细节，遇到问题很难排查。如果想更容易可控，推荐使用二进制包部署Kubernetes集群，虽然手动部署麻烦点，期间可以学习很多工作原理，也利于后期维护。（主要是有利于学习）</p><h3 id=安装要求>安装要求</h3><ol><li>连通外网</li><li>具有内网静态ip</li><li><del>4台linux(我用ubuntu20)服务器</del> ，all in one</li></ol><h3 id=规划>规划</h3><table><thead><tr><th><strong>角色</strong></th><th>IP</th><th>组件</th></tr></thead><tbody><tr><td>master1</td><td>192.168.1.81</td><td>kube-apiserver，kube-controller-manager，kube-scheduler，etcd，kubelet，kube-proxy，docker</td></tr></tbody></table><h3 id=主机初始化>主机初始化</h3><pre><code class=language-shell># 关闭swap
+sed -ri 's/.*swap.*/#&amp;/' /etc/fstab    # 永久
+# 根据规划设置主机名
+hostnamectl set-hostname &lt;hostname&gt;
+# 将桥接的IPv4流量传递到iptables的链
+cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+
+apt install bash-completion conntrack ipvsadm jq libseccomp2 golang-cfssl
+
+# 方便后续操作
+cat &lt;&lt;EOF &gt;&gt; ~/.bashrc
+export PATH=/opt/etcd/bin:/opt/kubernetes/bin:/opt/cni/bin:$PATH
+EOF
+</code></pre><h1 id=部署etcd>部署etcd</h1><ol><li>颁发证书</li></ol><pre><code class=language-shell># 创建工作目录：
+mkdir -p ~/TLS/{etcd,k8s} &amp;&amp; cd TLS/etcd
+# 自签CA：
+cat &gt; ca-config.json &lt;&lt; EOF
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;www&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+EOF
+
+cat &gt; ca-csr.json &lt;&lt; EOF
+{
+    &quot;CN&quot;: &quot;etcd CA&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;
+        }
+    ]
+}
+EOF
+
+# 使用自签CA签发Etcd HTTPS证书
+cat &gt; server-csr.json &lt;&lt; EOF
+{
+    &quot;CN&quot;: &quot;etcd&quot;,
+    &quot;hosts&quot;: [
+    &quot;192.168.1.81&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;
+        }
+    ]
+}
+EOF
+</code></pre><ol start=2><li>下载源码及配置</li></ol><pre><code class=language-shell>wget https://github.com/etcd-io/etcd/releases/download/v3.4.11/etcd-v3.4.11-linux-amd64.tar.gz
+mkdir /opt/etcd/{bin,cfg,ssl} -p
+tar zxvf etcd-v3.4.11-linux-amd64.tar.gz
+mv etcd-v3.4.11-linux-amd64/{etcd,etcdctl} /opt/etcd/bin/
+
+cat &gt; /opt/etcd/cfg/etcd.conf &lt;&lt; EOF
+#[Member]
+ETCD_NAME=&quot;etcd-1&quot;
+ETCD_DATA_DIR=&quot;/var/lib/etcd/default.etcd&quot;
+ETCD_LISTEN_PEER_URLS=&quot;https://192.168.1.81:2380&quot;
+ETCD_LISTEN_CLIENT_URLS=&quot;https://192.168.1.81:2379&quot;
+#[Clustering]
+ETCD_INITIAL_ADVERTISE_PEER_URLS=&quot;https://192.168.1.81:2380&quot;
+ETCD_ADVERTISE_CLIENT_URLS=&quot;https://192.168.1.81:2379&quot;
+ETCD_INITIAL_CLUSTER=&quot;etcd-1=https://192.168.1.81:2380&quot;
+ETCD_INITIAL_CLUSTER_TOKEN=&quot;etcd-cluster&quot;
+ETCD_INITIAL_CLUSTER_STATE=&quot;new&quot;
+EOF
+</code></pre><ol start=3><li>systemd管理etcd</li></ol><pre><code class=language-shell>cat &gt; /usr/lib/systemd/system/etcd.service &lt;&lt; EOF
+[Unit]
+Description=Etcd Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=notify
+ExecStart=/opt/etcd/bin/etcd \
+--name=etcd-1 \
+--data-dir=/var/lib/etcd/default.etcd \
+--listen-peer-urls=https://192.168.1.81:2380 \
+--listen-client-urls=https://192.168.1.81:2379 \
+--initial-advertise-peer-urls=https://192.168.1.81:2380 \
+--initial-cluster='etcd-1=https://192.168.1.81:2380' \
+--initial-cluster-state='new' \
+--initial-cluster-token='etcd-cluster' \
+--advertise-client-urls='https://192.168.1.81:2379' \
+--cert-file=/opt/etcd/ssl/server.pem \
+--key-file=/opt/etcd/ssl/server-key.pem \
+--peer-cert-file=/opt/etcd/ssl/server.pem \
+--peer-key-file=/opt/etcd/ssl/server-key.pem \
+--trusted-ca-file=/opt/etcd/ssl/ca.pem \
+--peer-trusted-ca-file=/opt/etcd/ssl/ca.pem \
+--logger=zap
+Restart=on-failure
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+EOF
+export PATH=/opt/etcd/bin:$PATH
+#验证集群状态
+etcdctl --cacert=/opt/etcd/ssl/ca.pem --cert=/opt/etcd/ssl/server.pem --key=/opt/etcd/ssl/server-key.pem --endpoints=&quot;https://192.168.1.81:2379&quot; endpoint health
+</code></pre><h1 id=docker>docker</h1><pre><code class=language-shell>apt install docker.io
+cat &gt; /etc/docker/daemon.json &lt;&lt; EOF
+{
+  &quot;registry-mirrors&quot;: [
+    &quot;https://30l6yhjq.mirror.aliyuncs.com&quot;
+  ],
+  &quot;exec-opts&quot;: [ &quot;native.cgroupdriver=systemd&quot; ]
+}
+EOF
+systemctl daemon-reload
+systemctl restart docker
+systemctl enable docker
+</code></pre><h1 id=kube-apiserver>kube-apiserver</h1><ol><li>自签证书颁发机构</li></ol><pre><code class=language-shell>cd ~/TLS/k8s
+
+cat &gt; ca-config.json &lt;&lt; EOF
+{
+  &quot;signing&quot;: {
+    &quot;default&quot;: {
+      &quot;expiry&quot;: &quot;87600h&quot;
+    },
+    &quot;profiles&quot;: {
+      &quot;kubernetes&quot;: {
+         &quot;expiry&quot;: &quot;87600h&quot;,
+         &quot;usages&quot;: [
+            &quot;signing&quot;,
+            &quot;key encipherment&quot;,
+            &quot;server auth&quot;,
+            &quot;client auth&quot;
+        ]
+      }
+    }
+  }
+}
+EOF
+cat &gt; ca-csr.json &lt;&lt; EOF
+{
+    &quot;CN&quot;: &quot;kubernetes&quot;,
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;Beijing&quot;,
+            &quot;ST&quot;: &quot;Beijing&quot;,
+            &quot;O&quot;: &quot;k8s&quot;,
+            &quot;OU&quot;: &quot;System&quot;
+        }
+    ]
+}
+EOF
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca -
+</code></pre><ol start=2><li>自签apiserver https证书</li></ol><pre><code class=language-shell>cat &gt; server-csr.json &lt;&lt; EOF
+{
+    &quot;CN&quot;: &quot;kubernetes&quot;,
+    &quot;hosts&quot;: [
+      &quot;10.0.0.1&quot;,
+      &quot;127.0.0.1&quot;,
+      &quot;192.168.1.81&quot;,
+      &quot;kubernetes&quot;,
+      &quot;kubernetes.default&quot;,
+      &quot;kubernetes.default.svc&quot;,
+      &quot;kubernetes.default.svc.cluster&quot;,
+      &quot;kubernetes.default.svc.cluster.local&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;rsa&quot;,
+        &quot;size&quot;: 2048
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;CN&quot;,
+            &quot;L&quot;: &quot;BeiJing&quot;,
+            &quot;ST&quot;: &quot;BeiJing&quot;,
+            &quot;O&quot;: &quot;k8s&quot;,
+            &quot;OU&quot;: &quot;System&quot;
+        }
+    ]
+}
+EOF
+</code></pre><ol start=3><li>启用 TLS Bootstrapping 机制,创建token文件</li></ol><pre><code class=language-shell>cat &gt; /opt/kubernetes/cfg/token.csv &lt;&lt; EOF
+c47ffb939f5ca36231d9e3121a252940,kubelet-bootstrap,10001,&quot;system:node-bootstrapper&quot;
+EOF
+</code></pre><ol start=4><li>apiserver</li></ol><pre><code class=language-shell>wget https://dl.k8s.io/v1.18.8/kubernetes-server-linux-amd64.tar.gz
+mkdir -p /opt/kubernetes/{bin,cfg,ssl,logs}
+tar zxvf kubernetes-server-linux-amd64.tar.gz
+cd kubernetes/server/bin
+# 拷贝二进制文件
+cp kube-apiserver kube-scheduler kube-controller-manager kubectl /opt/kubernetes/bin
+
+# 拷贝证书
+cp ~/TLS/k8s/ca*pem ~/TLS/k8s/server*pem /opt/kubernetes/ssl/
+
+</code></pre><ol start=5><li>systemd管理apiserver</li></ol><pre><code class=language-shell>cat &gt; /usr/lib/systemd/system/kube-apiserver.service &lt;&lt; EOF
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+[Service]
+ExecStart=/opt/kubernetes/bin/kube-apiserver \
+--logtostderr=false \
+--v=2 \
+--log-dir=/opt/kubernetes/logs \
+--etcd-servers=https://192.168.1.81:2379 \
+--bind-address=192.168.1.81 \
+--secure-port=6443 \
+--advertise-address=192.168.1.81 \
+--allow-privileged=true \
+--service-cluster-ip-range=10.0.0.0/24 \
+--enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,ResourceQuota,NodeRestriction \
+--authorization-mode=RBAC,Node \
+--enable-bootstrap-token-auth=true \
+--token-auth-file=/opt/kubernetes/cfg/token.csv \
+--service-node-port-range=20000-40000 \
+--kubelet-client-certificate=/opt/kubernetes/ssl/server.pem \
+--kubelet-client-key=/opt/kubernetes/ssl/server-key.pem \
+--tls-cert-file=/opt/kubernetes/ssl/server.pem  \
+--tls-private-key-file=/opt/kubernetes/ssl/server-key.pem \
+--client-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--etcd-cafile=/opt/etcd/ssl/ca.pem \
+--etcd-certfile=/opt/etcd/ssl/server.pem \
+--etcd-keyfile=/opt/etcd/ssl/server-key.pem \
+--audit-log-maxage=30 \
+--audit-log-maxbackup=3 \
+--audit-log-maxsize=100 \
+--audit-log-path=/opt/kubernetes/logs/k8s-audit.log
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start kube-apiserver
+systemctl enable kube-apiserver
+</code></pre><h1 id=kube-controller-manager>kube-controller-manager</h1><ol><li>systemd管理controller-manager</li></ol><pre><code class=language-shell>cat &gt; /usr/lib/systemd/system/kube-controller-manager.service &lt;&lt; EOF
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+[Service]
+ExecStart=/opt/kubernetes/bin/kube-controller-manager \
+--logtostderr=false \
+--v=2 \
+--log-dir=/opt/kubernetes/logs \
+--leader-elect=true \
+--master=127.0.0.1:8080 \
+--bind-address=127.0.0.1 \
+--allocate-node-cidrs=true \
+--cluster-cidr=10.244.0.0/16 \
+--service-cluster-ip-range=10.0.0.0/24 \
+--cluster-signing-cert-file=/opt/kubernetes/ssl/ca.pem \
+--cluster-signing-key-file=/opt/kubernetes/ssl/ca-key.pem  \
+--root-ca-file=/opt/kubernetes/ssl/ca.pem \
+--service-account-private-key-file=/opt/kubernetes/ssl/ca-key.pem \
+--experimental-cluster-signing-duration=87600h0m0s
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start kube-controller-manager
+systemctl enable kube-controller-manager
+</code></pre><h1 id=kube-scheduler>kube-scheduler</h1><pre><code class=language-shell>cat &gt; /usr/lib/systemd/system/kube-scheduler.service &lt;&lt; EOF
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+[Service]
+ExecStart=/opt/kubernetes/bin/kube-scheduler \
+--logtostderr=false \
+--v=2 \
+--log-dir=/opt/kubernetes/logs \
+--leader-elect \
+--master=127.0.0.1:8080 \
+--bind-address=127.0.0.1
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start kube-scheduler
+systemctl enable kube-scheduler
+</code></pre><p>至此，master所需组件已经安装完毕</p><h1 id=kubelet>kubelet</h1><ol><li>拷贝二进制文件</li></ol><pre><code class=language-shell>mkdir -p /opt/kubernetes/{bin,cfg,ssl,logs}
+cd kubernetes/server/bin
+cp kubelet kube-proxy /opt/kubernetes/bin
+</code></pre><ol start=2><li>配置参数文件</li></ol><pre><code class=language-shell>cat &gt; /opt/kubernetes/cfg/kubelet-config.yml &lt;&lt; EOF
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+address: 0.0.0.0
+port: 10250
+readOnlyPort: 10255
+cgroupDriver: cgroupfs
+clusterDNS:
+- 10.0.0.2
+clusterDomain: cluster.local
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    cacheTTL: 2m0s
+    enabled: true
+  x509:
+    clientCAFile: /opt/kubernetes/ssl/ca.pem
+authorization:
+  mode: Webhook
+  webhook:
+    cacheAuthorizedTTL: 5m0s
+    cacheUnauthorizedTTL: 30s
+evictionHard:
+  imagefs.available: 15%
+  memory.available: 100Mi
+  nodefs.available: 10%
+  nodefs.inodesFree: 5%
+maxOpenFiles: 1000000
+maxPods: 110
+EOF
+</code></pre><ol start=3><li>生成bootstrap.kubeconfig文件</li></ol><pre><code>KUBE_APISERVER=&quot;https://192.168.1.81:6443&quot; # apiserver IP:PORT
+TOKEN=&quot;c47ffb939f5ca36231d9e3121a252940&quot; # 与token.csv里保持一致
+
+# 生成 kubelet bootstrap kubeconfig 配置文件
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=bootstrap.kubeconfig
+kubectl config set-credentials &quot;kubelet-bootstrap&quot; \
+  --token=${TOKEN} \
+  --kubeconfig=bootstrap.kubeconfig
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=&quot;kubelet-bootstrap&quot; \
+  --kubeconfig=bootstrap.kubeconfig
+kubectl config use-context default --kubeconfig=bootstrap.kubeconfig
+
+cp bootstrap.kubeconfig /opt/kubernetes/cfg
+</code></pre><ol start=4><li>systemd管理kubelet</li></ol><pre><code class=language-shell>cat &gt; /usr/lib/systemd/system/kubelet.service &lt;&lt; EOF
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service
+[Service]
+ExecStart=/opt/kubernetes/bin/kubelet \
+--logtostderr=false \
+--v=2 \
+--log-dir=/opt/kubernetes/logs \
+--hostname-override=km1 \
+--network-plugin=cni \
+--kubeconfig=/opt/kubernetes/cfg/kubelet.kubeconfig \
+--bootstrap-kubeconfig=/opt/kubernetes/cfg/bootstrap.kubeconfig \
+--config=/opt/kubernetes/cfg/kubelet-config.yml \
+--cert-dir=/opt/kubernetes/ssl \
+--pod-infra-container-image=easzlab/pause-amd64:3.2
+Restart=on-failure
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start kubelet
+systemctl enable kubelet
+</code></pre><ol start=5><li>批准kubelet证书申请并加入集群</li></ol><pre><code class=language-shell>kubectl get csr
+kubectl certificate approve node-csr-1hBi056TVssBlAKSC2wQgcqeJNdY9cTJKS8Ytziub24
+kubectl get node
+</code></pre><blockquote><p>由于cni没有部署，所以node is NotReady</p></blockquote><h1 id=kube-proxy>kube-proxy</h1><ol><li>配置proxy参数</li></ol><pre><code class=language-shell>cat &gt; /opt/kubernetes/cfg/kube-proxy-config.yml &lt;&lt; EOF
+kind: KubeProxyConfiguration
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+bindAddress: 0.0.0.0
+metricsBindAddress: 0.0.0.0:10249
+clientConnection:
+  kubeconfig: /opt/kubernetes/cfg/kube-proxy.kubeconfig
+hostnameOverride: km1
+clusterCIDR: 10.0.0.0/24
+EOF
+</code></pre><ol start=2><li>生成kube-proxy.kubeconfig</li></ol><pre><code class=language-shell># 切换工作目录
+cd ~/TLS/k8s
+
+# 创建证书请求文件
+cat &gt; kube-proxy-csr.json &lt;&lt; EOF
+{
+  &quot;CN&quot;: &quot;system:kube-proxy&quot;,
+  &quot;hosts&quot;: [],
+  &quot;key&quot;: {
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  },
+  &quot;names&quot;: [
+    {
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;L&quot;: &quot;BeiJing&quot;,
+      &quot;ST&quot;: &quot;BeiJing&quot;,
+      &quot;O&quot;: &quot;k8s&quot;,
+      &quot;OU&quot;: &quot;System&quot;
+    }
+  ]
+}
+EOF
+
+# 生成证书
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy
+</code></pre><ol start=3><li>生成kube-proxy.kubeconfig文件</li></ol><pre><code class=language-shell>KUBE_APISERVER=&quot;https://192.168.1.81:6443&quot;
+
+kubectl config set-cluster kubernetes \
+  --certificate-authority=/opt/kubernetes/ssl/ca.pem \
+  --embed-certs=true \
+  --server=${KUBE_APISERVER} \
+  --kubeconfig=kube-proxy.kubeconfig
+kubectl config set-credentials kube-proxy \
+  --client-certificate=./kube-proxy.pem \
+  --client-key=./kube-proxy-key.pem \
+  --embed-certs=true \
+  --kubeconfig=kube-proxy.kubeconfig
+kubectl config set-context default \
+  --cluster=kubernetes \
+  --user=kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+cp kube-proxy.kubeconfig /opt/kubernetes/cfg/
+</code></pre><ol start=4><li>systemd管理kube-proxy</li></ol><pre><code class=language-shell>cat &gt; /usr/lib/systemd/system/kube-proxy.service &lt;&lt; EOF
+[Unit]
+Description=Kubernetes Proxy
+After=network.target
+[Service]
+ExecStart=/opt/kubernetes/bin/kube-proxy \
+--logtostderr=false \
+--v=2 \
+--log-dir=/opt/kubernetes/logs \
+--config=/opt/kubernetes/cfg/kube-proxy-config.yml
+Restart=on-failure
+LimitNOFILE=65536
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start kube-proxy
+systemctl enable kube-proxy
+</code></pre><ol start=5><li>部署CNI网络</li></ol><pre><code class=language-shell>wget https://github.com/containernetworking/plugins/releases/download/v0.8.6/cni-plugins-linux-amd64-v0.8.6.tgz
+mkdir -p /opt/cni/bin
+tar zxvf cni-plugins-linux-amd64-v0.8.6.tgz -C /opt/cni/bin
+
+wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+sed -i -r &quot;s#quay.io/coreos/flannel:.*-amd64#lizhenliang/flannel:v0.12.0-amd64#g&quot; kube-flannel.yml
+kubectl apply -f kube-flannel.yml
+</code></pre><blockquote><p>正常情况下 node 已经Ready</p></blockquote><ol start=6><li>授权apiserver访问kubelet</li></ol><pre><code class=language-shell>cat &gt; apiserver-to-kubelet-rbac.yaml &lt;&lt; EOF
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: &quot;true&quot;
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:kube-apiserver-to-kubelet
+rules:
+  - apiGroups:
+      - &quot;&quot;
+    resources:
+      - nodes/proxy
+      - nodes/stats
+      - nodes/log
+      - nodes/spec
+      - nodes/metrics
+      - pods/log
+    verbs:
+      - &quot;*&quot;
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: system:kube-apiserver
+  namespace: &quot;&quot;
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:kube-apiserver-to-kubelet
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: kubernetes
+EOF
+
+kubectl apply -f apiserver-to-kubelet-rbac.yaml
+</code></pre><ol start=7><li>部署core dns</li></ol><pre><code>cat &gt; coredns.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: coredns
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:coredns
+rules:
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - endpoints
+  - services
+  - pods
+  - namespaces
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - nodes
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: &quot;true&quot;
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:coredns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:coredns
+subjects:
+- kind: ServiceAccount
+  name: coredns
+  namespace: kube-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    .:53 {
+        errors
+        health {
+          lameduck 5s
+        }
+        ready
+        kubernetes cluster.local. in-addr.arpa ip6.arpa {
+          pods insecure
+          fallthrough in-addr.arpa ip6.arpa
+        }
+        prometheus :9153
+        forward . /etc/resolv.conf
+        cache 30
+        reload
+        loadbalance
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coredns
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/name: &quot;CoreDNS&quot;
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      k8s-app: kube-dns
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-dns
+    spec:
+      priorityClassName: system-cluster-critical
+      serviceAccountName: coredns
+      tolerations:
+        - key: &quot;CriticalAddonsOnly&quot;
+          operator: &quot;Exists&quot;
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: k8s-app
+                operator: In
+                values: [&quot;kube-dns&quot;]
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - name: coredns
+        image: coredns/coredns:1.7.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 170Mi
+          requests:
+            cpu: 100m
+            memory: 70Mi
+        args: [ &quot;-conf&quot;, &quot;/etc/coredns/Corefile&quot; ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/coredns
+          readOnly: true
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 9153
+          name: metrics
+          protocol: TCP
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - all
+          readOnlyRootFilesystem: true
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8181
+            scheme: HTTP
+      dnsPolicy: Default
+      volumes:
+        - name: config-volume
+          configMap:
+            name: coredns
+            items:
+            - key: Corefile
+              path: Corefile
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  annotations:
+    prometheus.io/port: &quot;9153&quot;
+    prometheus.io/scrape: &quot;true&quot;
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: &quot;true&quot;
+    kubernetes.io/name: &quot;CoreDNS&quot;
+spec:
+  selector:
+    k8s-app: kube-dns
+  clusterIP: 10.0.0.2
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+  - name: metrics
+    port: 9153
+    protocol: TCP
+EOF
+
+kubectl apply -f coredns.yaml
+</code></pre><ol start=8><li>DNS解析测试</li></ol><pre><code class=language-shell>kubectl run -it --rm dns-test --image=busybox:1.28.4 sh
+nslookup kubernetes
+
+# 正常情况下会显示
+Server:    10.0.0.2
+Address 1: 10.0.0.2 kube-dns.kube-system.svc.cluster.local
+
+Name:      kubernetes
+Address 1: 10.0.0.1 kubernetes.default.svc.cluster.local
+</code></pre><h1 id=总结>总结</h1><ol><li><p>etcd和api server都是只用https通讯, 所以要注意证书过期时间</p></li><li><p>etcd只有api server访问</p></li><li><p>controller-manager，scheduler ，kubelet会访问api server，采用http 长连接方式watch apiserver状态变化，使用短连接报告apiserver自身状态</p></li></ol></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接:</strong>
+<a href=https://blog.yoogo.top/2020/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85k8s/ title=二进制安装k8s target=_blank rel=external>https://blog.yoogo.top/2020/08/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85k8s/</a></li><li class=post-copyright-license><strong>License:</strong>
+<a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>CC BY 4.0 CN</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/yoogoc target=_blank class="img-burn thumb-sm visible-lg"><img src=https://blog.yoogo.top/avatar.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/yoogoc target=_blank><span class=text-dark>yoogo</span><small class=ml-1x>emmmmming</small></a></h3><div>emmmmm</div></div></figure></div></div></div></article></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=https://blog.yoogo.top/2020/07/kvm/ title="kvm install"><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=next><a href=https://blog.yoogo.top/2020/08/bind9/ title="bind9(todo detail)"><span>上一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden=true></i></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i>
+<i class="text-in icon icon-close"></i>
+<span>]</span></a></li></ul><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/yoogoc target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=https://blog.yoogo.top/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li></ul><div class=copyright>&copy;2018 -
+2021<div class=publishby>Theme by <a href=https://github.com/xiaoheiAh target=_blank>xiaoheiAh </a>base on<a href=https://github.com/xiaoheiAh/hugo-theme-pure target=_blank> pure</a>.</div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script><script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script><script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js defer></script><script>hljs.configure({tabReplace:'    ',classPrefix:''}),hljs.initHighlightingOnLoad()</script><script src=https://blog.yoogo.top/js/application.min.a94ab19cb63a95c8d7fbd7b85cab3ddeea8c369bdf75b9cab6708787ead123af.js></script><script src=https://blog.yoogo.top/js/plugin.min.19c5bcb2fb0789ab4f2b7834e5ceb5e92635645605bab902c1024b25f1502364.js></script><script>(function(a){var b={TRANSLATION:{POSTS:'文章',PAGES:'页面',CATEGORIES:'分类',TAGS:'标签',UNTITLED:'(未命名)'},ROOT_URL:'https://blog.yoogo.top/',CONTENT_URL:'https://blog.yoogo.top//searchindex.json '};a.INSIGHT_CONFIG=b})(window)</script><script type=text/javascript src=https://blog.yoogo.top/js/insight.min.4a2d52de4bfff73e0c688404fe3d17c9a3ae12d9888e1e1ac9c690e4890de2ded50fe55f2b819c2ba55435a76f396f3ea6805765f0b0af5635cdf74ea459eab0.js defer></script><script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script><script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:!0})</script></body></html>
