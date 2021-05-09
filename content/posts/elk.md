@@ -2,7 +2,7 @@
 title: elk docker单例搭建
 tags:
 - devops
-date: 2020-02-15 01:48
+date: 2020-02-15
 ---
 
 ## elasticsearch

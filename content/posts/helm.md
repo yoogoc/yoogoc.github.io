@@ -195,13 +195,17 @@ helm install chart apphub/chartmuseum --set persistence.enabled=true,persistence
 ## kafka
 
 ```shell
-helm install kafka --namespace kafka bitnami/kafka --create-namespace \
+helm upgrade -i kafka --namespace kafka bitnami/kafka --create-namespace \
 --set external.enabled=true \
 --set global.storageClass=local-path,persistence.size=50Gi \
 --set zookeeper.persistence.size=10Gi \
 --set livenessProbe.initialDelaySeconds=100 \
 --set livenessProbe.timeoutSeconds=100,readinessProbe.initialDelaySeconds=100 \
---set readinessProbe.timeoutSeconds=100
+--set readinessProbe.timeoutSeconds=100 \
+--set externalAccess.enabled=true \
+--set externalAccess.service.type=NodePort \
+--set externalAccess.service.nodePorts[0]=29094 \
+--set externalAccess.service.useHostIPs=true
 ```
 
 ## jenkins

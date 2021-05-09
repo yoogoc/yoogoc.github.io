@@ -2,7 +2,7 @@
 title: spring 跨域坑点
 tags:
 - java
-date: 2020-02-12 22:35
+date: 2020-02-12
 ---
 
 ### 1. 正常的Spring boot项目
