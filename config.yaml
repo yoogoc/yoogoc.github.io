@@ -12,6 +12,8 @@ googleAnalytics: ""      # UA-XXXXXXXX-X
 permalinks:
   posts: /:year/:month/:filename/
 
+buildFuture: true
+
 taxonomies:
     category : categories
     tag : tags
