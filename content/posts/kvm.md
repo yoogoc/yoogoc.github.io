@@ -154,3 +154,4 @@ qemu-img create -f qcow2 /data/vmdisk/ceph-attach1.img 20G
 ## 踩过的坑
 
 1. 硬盘容量超过一定百分比会出现虚拟机paused状态，且resume无效，仍是paused
+

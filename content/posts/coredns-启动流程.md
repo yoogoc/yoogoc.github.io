@@ -4,6 +4,7 @@ title: coredns-启动流程
 tags:
 - k8s
 - dns
+- coredns
 - go
 date: 2021-03-08 22:42:00
 ---

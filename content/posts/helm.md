@@ -264,3 +264,32 @@ helm install gitlab gitlab/gitlab -n gitlab --create-namespace \
 --set global.ingress.class=nginx
 ```
 
+
+
+
+
+## loki stack
+
+```sh
+helm upgrade --install loki grafana/loki-stack \
+--set fluent-bit.enabled=true,promtail.enabled=false \
+--set grafana.enabled=true,prometheus.enabled=true \
+--set prometheus.alertmanager.persistentVolume.enabled=false \
+--set prometheus.server.persistentVolume.enabled=false \
+--set loki.persistence.enabled=true \
+--set grafana.persistence.enabled=true \
+--set grafana.ingress.enabled=true \
+--set grafana.ingress.hosts[0]=grafana.yoogo.cc \
+-n loki --create-namespace
+```
+
+
+
+## Kiali
+
+```sh
+helm upgrade -i kiali-server -n istio-system \
+--set server.web_fqdn=kiali.yoogo.cc,auth.strategy=anonymous \ 
+--repo https://kiali.org/helm-charts kiali-server
+```
+
