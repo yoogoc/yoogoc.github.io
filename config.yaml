@@ -84,7 +84,7 @@ params:
     max: 20
   # Allows you to specify an override stylesheet
   # put custom.css in $hugo_root_dir/static/
-  # customCSS: css/custom.css
+  customCSS: css/custom.css
 
   menuIcons:
     enable: true  # 是否启用导航菜单图标
