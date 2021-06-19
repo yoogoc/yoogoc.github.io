@@ -1,0 +1,9 @@
+/* 此样式为修复mermaid，
+   pure主题对.label选择器做了其他样式，
+   会和mermaid有冲突，主要表现为字体不居中对齐
+*/
+g.label {
+  font-size: initial;
+  font-weight: initial;
+  line-height: initial;
+};
