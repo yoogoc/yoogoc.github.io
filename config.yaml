@@ -103,8 +103,8 @@ params:
     avatar: sites-images/Avatar200.png
     gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
     author: yoogo
-    author_title: emmmmming
-    author_description: emmmmm
+    author_title: 多读书，少放炮
+    author_description: 我书读的不多，想的却不少
     location: 广州
     follow: https://github.com/yoogoc
     # Social Links
