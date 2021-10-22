@@ -167,7 +167,12 @@ helm install nginx-ingress-controller bitnami/nginx-ingress-controller -n nginx-
 ## redis
 
 ```shell
-helm install redis bitnami/redis --set global.redis.password=123456,global.storageClass=local-path,master.persistence.size=1Gi,slave.persistence.size=1Gi,master.service.nodePort=32001,master.service.type=NodePort,cluster.enabled=false -n redis --create-namespace
+helm install redis bitnami/redis \
+--set auth.enabled=false \
+--set global.storageClass=local-path \
+--set master.persistence.size=1Gi \
+--set master.service.nodePort=32001,master.service.type=NodePort \
+--set architecture=standalone -n redis --create-namespace
 ```
 
 # pg & debezium
@@ -291,5 +296,57 @@ helm upgrade --install loki grafana/loki-stack \
 helm upgrade -i kiali-server -n istio-system \
 --set server.web_fqdn=kiali.yoogo.cc,auth.strategy=anonymous \ 
 --repo https://kiali.org/helm-charts kiali-server
+```
+
+
+
+##  kubeapps
+
+```shell
+helm upgrade -i kubeapps --namespace kubeapps bitnami/kubeapps \
+--set ingress.enabled=true,ingress.hostname=kubeapps.yoogo.cc \
+--set postgresql.persistence.enabled=true \
+--set postgresql.resources.requests={}
+```
+
+ 
+
+## Fluentd
+
+```shell
+helm upgrade -i fluentd --namespace monitor bitnami/fluentd -f fluentd-helm-values.yaml
+```
+
+
+
+### prometheus
+
+```shell
+helm install kube-prometheus bitnami/kube-prometheus \
+--set prometheus.ingress.enabled=true \
+--set prometheus.ingress.hostname=prometheus.yoogo.cc \
+-n monitor --create-namespace
+
+
+cat<<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: monitor
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+  namespace: monitor
+spec:
+  serviceMonitorSelector:
+    matchLabels:
+      team: frontend
+  serviceAccountName: prometheus
+  resources:
+    requests: {}
+EOF
 ```
 
