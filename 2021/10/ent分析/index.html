@@ -1,0 +1,1014 @@
+<!doctype html><html lang=zh>
+<head>
+<title>
+ent分析-ent codegen - yoogo
+</title>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui">
+<meta name=renderer content="webkit">
+<meta http-equiv=cache-control content="no-transform">
+<meta http-equiv=cache-control content="no-siteapp">
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black">
+<meta name=format-detection content="telephone=no,email=no,adress=no">
+<meta name=theme-color content="#000000">
+<meta http-equiv=window-target content="_top">
+<meta name=description content="代码基于commit:d199a7c26797e29ffbd5651673301bc936f99029 init-初始化schema 目的 生成数">
+<meta name=generator content="Hugo 0.88.1 with theme pure">
+<title>ent分析-ent codegen - yoogo</title>
+<link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css>
+<link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async>
+<link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async>
+<link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async>
+<meta property="og:title" content="ent分析-ent codegen">
+<meta property="og:description" content="代码基于commit:d199a7c26797e29ffbd5651673301bc936f99029 init-初始化schema 目的 生成数">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-07T12:30:00+00:00">
+<meta property="article:modified_time" content="2021-10-07T12:30:00+00:00">
+<meta itemprop=name content="ent分析-ent codegen">
+<meta itemprop=description content="代码基于commit:d199a7c26797e29ffbd5651673301bc936f99029 init-初始化schema 目的 生成数"><meta itemprop=datePublished content="2021-10-07T12:30:00+00:00">
+<meta itemprop=dateModified content="2021-10-07T12:30:00+00:00">
+<meta itemprop=wordCount content="3843">
+<meta itemprop=keywords content="go,"><meta name=twitter:card content="summary">
+<meta name=twitter:title content="ent分析-ent codegen">
+<meta name=twitter:description content="代码基于commit:d199a7c26797e29ffbd5651673301bc936f99029 init-初始化schema 目的 生成数"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
+</head>
+<body class="main-center theme-black" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader>
+<div class=slimContent>
+<div class=navbar-header>
+<div class="profile-block text-center">
+<a id=avatar href=https://github.com/yoogoc target=_blank>
+<img class="img-circle img-rotate" src=https://blog.yoogo.top/sites-images/Avatar200.png width=200 height=200>
+</a>
+<h2 id=name class="hidden-xs hidden-sm">yoogo</h2>
+<h3 id=title class="hidden-xs hidden-sm hidden-md">多读书，少放炮</h3>
+<small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>广州</small>
+</div><div class=search id=search-form-wrap>
+<form class="search-form sidebar-form">
+<div class=input-group>
+<input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn>
+<button type=submit class="search-form-submit btn btn-flat" onclick=return!1><i class="icon icon-search"></i></button>
+</span>
+</div>
+<div class=ins-search>
+<div class=ins-search-mask></div>
+<div class=ins-search-container>
+<div class=ins-input-wrapper>
+<input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button>
+</div>
+<div class=ins-section-wrapper>
+<div class=ins-section-container></div>
+</div>
+</div>
+</div>
+</form>
+</div>
+<button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+</div>
+<nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation>
+<ul class="nav navbar-nav main-nav">
+<li class="menu-item menu-item-home">
+<a href=/>
+<i class="icon icon-home-fill"></i>
+<span class=menu-title>Home</span>
+</a>
+</li>
+<li class="menu-item menu-item-archives">
+<a href=/posts/>
+<i class="icon icon-archives-fill"></i>
+<span class=menu-title>Archives</span>
+</a>
+</li>
+<li class="menu-item menu-item-categories">
+<a href=/categories/>
+<i class="icon icon-folder"></i>
+<span class=menu-title>Categories</span>
+</a>
+</li>
+<li class="menu-item menu-item-tags">
+<a href=/tags/>
+<i class="icon icon-tags"></i>
+<span class=menu-title>Tags</span>
+</a>
+</li>
+<li class="menu-item menu-item-about">
+<a href=/about/>
+<i class="icon icon-cup-fill"></i>
+<span class=menu-title>About</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar>
+<div class=slimContent>
+<div class=widget>
+<h3 class=widget-title> 标签</h3>
+<div id=tag-cloud-list class=widget-body>
+<a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link rel=1>cloudnative<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/coredns/ class=tag-list-link rel=2>coredns<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link rel=5>devops<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link rel=2>dns<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link rel=1>editor<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/git/ class=tag-list-link rel=5>git<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=7>go<span class=tag-list-count>7</span></a>
+<a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link rel=1>greatwall<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link rel=1>hexo<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link rel=1>iam<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/java/ class=tag-list-link rel=8>java<span class=tag-list-count>8</span></a>
+<a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link rel=13>k8s<span class=tag-list-count>13</span></a>
+<a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link rel=6>linux<span class=tag-list-count>6</span></a>
+<a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link rel=1>mac<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link rel=1>markdown<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/os/ class=tag-list-link rel=2>os<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link rel=5>rails<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>体系结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link rel=1>工作流<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>数据结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link rel=1>正则<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link rel=2>计算思维<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link rel=1>计算机网络<span class=tag-list-count>1</span></a>
+</div>
+<script>document.onreadystatechange=()=>{document.readyState==='complete'&&tagCloud('#tag-cloud-list a',8,20)};function tagCloud(c,d,e){let b=0,a=0;$(c).each(function(){let c=Number($(this).attr("rel"));b<c&&(b=c),(a>c||a==0)&&(a=c)});let f=(e-d)/(b-a);$(c).each(function(){let b=$(this).attr("rel")-a;$(this).css({"font-size":d+b*f+'px'})})}</script>
+</div>
+<div class=widget>
+<h3 class=widget-title> 分类</h3>
+<div class=widget-body>
+<ul class=category-list>
+</ul>
+</div>
+</div>
+<div class=widget>
+<h3 class=widget-title> 标签</h3>
+<div class=widget-body>
+<ul class=tag-list>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link>cloudnative</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/coredns/ class=tag-list-link>coredns</a><span class=tag-list-count>2</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link>devops</a><span class=tag-list-count>5</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link>dns</a><span class=tag-list-count>2</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link>editor</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/git/ class=tag-list-link>git</a><span class=tag-list-count>5</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>7</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link>greatwall</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link>iam</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/java/ class=tag-list-link>java</a><span class=tag-list-count>8</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link>k8s</a><span class=tag-list-count>13</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>6</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link>mac</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link>markdown</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/os/ class=tag-list-link>os</a><span class=tag-list-count>2</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link>rails</a><span class=tag-list-count>5</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link>体系结构</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link>工作流</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link>数据结构</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link>正则</a><span class=tag-list-count>1</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link>计算思维</a><span class=tag-list-count>2</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link>计算机网络</a><span class=tag-list-count>1</span></li>
+</ul>
+</div>
+</div>
+<div class=widget>
+<h3 class=widget-title>最新文章</h3>
+<div class=widget-body>
+<ul class="recent-post-list list-unstyled no-thumbnail">
+<li>
+<div class=item-inner>
+<p class=item-title>
+<a href=https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/ class=title>ent分析-ent codegen</a>
+</p>
+<p class=item-date>
+<time datetime="2021-10-07 12:30:00 +0000 UTC" itemprop=datePublished>2021-10-07</time>
+</p>
+</div>
+</li>
+<li>
+<div class=item-inner>
+<p class=item-title>
+<a href=https://blog.yoogo.top/2021/06/ingress-nginx%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/ class=title>ingress-nginx是如何工作的</a>
+</p>
+<p class=item-date>
+<time datetime="2021-06-19 13:06:00 +0000 UTC" itemprop=datePublished>2021-06-19</time>
+</p>
+</div>
+</li>
+<li>
+<div class=item-inner>
+<p class=item-title>
+<a href=https://blog.yoogo.top/2021/06/coredns-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0k8s%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/ class=title>coredns-如何实现k8s服务发现</a>
+</p>
+<p class=item-date>
+<time datetime="2021-06-07 18:54:00 +0000 UTC" itemprop=datePublished>2021-06-07</time>
+</p>
+</div>
+</li>
+<li>
+<div class=item-inner>
+<p class=item-title>
+<a href=https://blog.yoogo.top/2021/05/linux-namespace/ class=title>Linux Namespace</a>
+</p>
+<p class=item-date>
+<time datetime="2021-05-09 11:29:00 +0000 UTC" itemprop=datePublished>2021-05-09</time>
+</p>
+</div>
+</li>
+<li>
+<div class=item-inner>
+<p class=item-title>
+<a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ class=title>kubeadm部署k8s(todo)</a>
+</p>
+<p class=item-date>
+<time datetime="2021-04-18 15:57:00 +0000 UTC" itemprop=datePublished>2021-04-18</time>
+</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</aside>
+<aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar>
+<div class=slimContent>
+<h4 class=toc-title>文章目录</h4>
+<nav id=toc class="js-toc toc">
+</nav>
+</div>
+</aside>
+<main class=main role=main><div class=content>
+<article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting>
+<div class=article-header>
+<h1 itemprop=name>
+<a class=article-title href=/2021/10/ent%E5%88%86%E6%9E%90/>ent分析-ent codegen</a>
+</h1>
+<div class=article-meta>
+<span class=article-date>
+<i class="icon icon-calendar-check"></i>&nbsp;
+<a href=https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/ class=article-date>
+<time datetime="2021-10-07 12:30:00 +0000 UTC" itemprop=datePublished>2021-10-07</time>
+</a>
+</span>
+<span class=article-tag>
+<i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/go/> go </a>
+</span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 3843字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 8分 </span>
+</div>
+</div>
+<div class="article-entry marked-body js-toc-content" itemprop=articleBody>
+<blockquote>
+<p>代码基于<code>commit:d199a7c26797e29ffbd5651673301bc936f99029</code></p>
+</blockquote>
+<h1 id=init-初始化schema>init-初始化schema</h1>
+<h2 id=目的>目的</h2>
+<p>生成数据表/go entity 的schema文件，用于定义表结构/实体模型</p>
+<h2 id=源码分析>源码分析</h2>
+<ol>
+<li>cmd入口在<code>cmd/internal/base/base.go:66</code></li>
+</ol>
+<pre><code class=language-go>func InitCmd() *cobra.Command {
+	var target string
+	cmd := &amp;cobra.Command{
+		Use:   &quot;init [flags] [schemas]&quot;,
+		Short: &quot;initialize an environment with zero or more schemas&quot;,
+		Example: examples(
+			&quot;ent init Example&quot;,
+			&quot;ent init --target entv1/schema User Group&quot;,
+		),
+		// 命令行参数校验是否开始于大写
+		Args: func(_ *cobra.Command, names []string) error {
+			for _, name := range names {
+				if !unicode.IsUpper(rune(name[0])) {
+					return errors.New(&quot;schema names must begin with uppercase&quot;)
+				}
+			}
+			return nil
+		},
+		// 命令入口, 支持生成多schema
+		Run: func(cmd *cobra.Command, names []string) {
+			if err := initEnv(target, names); err != nil {
+				log.Fatalln(fmt.Errorf(&quot;ent/init: %w&quot;, err))
+			}
+		},
+	}
+	// 生成路径默认当前路径下ent/schema目录
+	cmd.Flags().StringVar(&amp;target, &quot;target&quot;, defaultSchema, &quot;target directory for schemas&quot;)
+	return cmd
+}
+</code></pre>
+<ol start=2>
+<li>执行入口<code>cmd/internal/base/base.go:182</code></li>
+</ol>
+<pre><code class=language-go>func initEnv(target string, names []string) error {
+	// 创建目录
+	if err := createDir(target); err != nil {
+		return fmt.Errorf(&quot;create dir %s: %w&quot;, target, err)
+	}
+	for _, name := range names {
+		// 校验name
+		if err := gen.ValidSchemaName(name); err != nil {
+			return fmt.Errorf(&quot;init schema %s: %w&quot;, name, err)
+		}
+		b := bytes.NewBuffer(nil)
+		// 模板渲染
+		if err := tmpl.Execute(b, name); err != nil {
+			return fmt.Errorf(&quot;executing template %s: %w&quot;, name, err)
+		}
+		// 写入目标目录
+		newFileTarget := filepath.Join(target, strings.ToLower(name+&quot;.go&quot;))
+		if err := os.WriteFile(newFileTarget, b.Bytes(), 0644); err != nil {
+			return fmt.Errorf(&quot;writing file %s: %w&quot;, newFileTarget, err)
+		}
+	}
+	return nil
+}
+</code></pre>
+<p>校验name：</p>
+<pre><code class=language-go>func ValidSchemaName(name string) error {
+	// Schema package is lower-cased (see Type.Package).
+	pkg := strings.ToLower(name)
+	// 是否为go关键字
+	if token.Lookup(pkg).IsKeyword() {
+		return fmt.Errorf(&quot;schema lowercase name conflicts with Go keyword %q&quot;, pkg)
+	}
+	// 是否为go原生类型
+	if types.Universe.Lookup(pkg) != nil {
+		return fmt.Errorf(&quot;schema lowercase name conflicts with Go predeclared identifier %q&quot;, pkg)
+	}
+	// 是否为ent关键字
+	if _, ok := globalIdent[pkg]; ok {
+		return fmt.Errorf(&quot;schema lowercase name conflicts ent predeclared identifier %q&quot;, pkg)
+	}
+	if _, ok := globalIdent[name]; ok {
+		return fmt.Errorf(&quot;schema name conflicts with ent predeclared identifier %q&quot;, name)
+	}
+	return nil
+}
+</code></pre>
+<h1 id=generate-根据schema生成go-code>generate-根据schema生成go code</h1>
+<h2 id=目的-1>目的</h2>
+<p>根据schema生成predicate，crud及ent基础代码（如context、config、runtime、mutation、client等）</p>
+<h2 id=源码分析-1>源码分析</h2>
+<ol>
+<li>cmd入口：<code>cmd/internal/base/base.go:117</code></li>
+</ol>
+<pre><code class=language-go>func GenerateCmd(postRun ...func(*gen.Config)) *cobra.Command {
+	var (
+		// Header: codegen头部信息
+		// Target: 目标目录
+		cfg       gen.Config
+		// 存储驱动:默认sql,可选gremlin
+		storage   string
+		// additional features
+		features  []string
+		// 外部模板,支持的格式:dir=xxx,file=xxx,glob=xxx
+		templates []string
+		// 代码生成的id类型,默认int
+		idtype    = IDType(field.TypeInt)
+		cmd       = &amp;cobra.Command{
+			Use:   &quot;generate [flags] path&quot;,
+			Short: &quot;generate go code for the schema directory&quot;,
+			Example: examples(
+				&quot;ent generate ./ent/schema&quot;,
+				&quot;ent generate github.com/a8m/x&quot;,
+			),
+			Args: cobra.ExactArgs(1),
+			Run: func(cmd *cobra.Command, path []string) {
+				// 加载驱动和features
+				opts := []entc.Option{
+					entc.Storage(storage),
+					entc.FeatureNames(features...),
+				}
+				// 将模板映射为Option结构体
+				for _, tmpl := range templates {
+					typ := &quot;dir&quot;
+					if parts := strings.SplitN(tmpl, &quot;=&quot;, 2); len(parts) &gt; 1 {
+						typ, tmpl = parts[0], parts[1]
+					}
+					switch typ {
+					case &quot;dir&quot;:
+						opts = append(opts, entc.TemplateDir(tmpl))
+					case &quot;file&quot;:
+						opts = append(opts, entc.TemplateFiles(tmpl))
+					case &quot;glob&quot;:
+						opts = append(opts, entc.TemplateGlob(tmpl))
+					default:
+						log.Fatalln(&quot;unsupported template type&quot;, typ)
+					}
+				}
+				// If the target directory is not inferred from
+				// the schema path, resolve its package path.
+				// 如果目标目录不在schema目录,需要找到一个合适的包路径
+				if cfg.Target != &quot;&quot; {
+					pkgPath, err := PkgPath(DefaultConfig, cfg.Target)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					cfg.Package = pkgPath
+				}
+				cfg.IDType = &amp;field.TypeInfo{Type: field.Type(idtype)}
+				// 执行gen
+				if err := entc.Generate(path[0], &amp;cfg, opts...); err != nil {
+					log.Fatalln(err)
+				}
+        // 生成后的hook
+				for _, fn := range postRun {
+					fn(&amp;cfg)
+				}
+			},
+		}
+	)
+	cmd.Flags().Var(&amp;idtype, &quot;idtype&quot;, &quot;type of the id field&quot;)
+	cmd.Flags().StringVar(&amp;storage, &quot;storage&quot;, &quot;sql&quot;, &quot;storage driver to support in codegen&quot;)
+	cmd.Flags().StringVar(&amp;cfg.Header, &quot;header&quot;, &quot;&quot;, &quot;override codegen header&quot;)
+	cmd.Flags().StringVar(&amp;cfg.Target, &quot;target&quot;, &quot;&quot;, &quot;target directory for codegen&quot;)
+	cmd.Flags().StringSliceVarP(&amp;features, &quot;feature&quot;, &quot;&quot;, nil, &quot;extend codegen with additional features&quot;)
+	cmd.Flags().StringSliceVarP(&amp;templates, &quot;template&quot;, &quot;&quot;, nil, &quot;external templates to execute&quot;)
+	return cmd
+}
+</code></pre>
+<ol start=2>
+<li>执行入口<code>entc/entc.go:53</code>：</li>
+</ol>
+<pre><code class=language-go>func Generate(schemaPath string, cfg *gen.Config, options ...Option) (err error) {
+	// 默认输出目录为schema同级
+	if cfg.Target == &quot;&quot; {
+		abs, err := filepath.Abs(schemaPath)
+		if err != nil {
+			return err
+		}
+		// default target-path for codegen is one dir above
+		// the schema.
+		cfg.Target = filepath.Dir(abs)
+	}
+	for _, opt := range options {
+		if err := opt(cfg); err != nil {
+			return err
+		}
+	}
+	// 默认存储为sql
+	if cfg.Storage == nil {
+		driver, err := gen.NewStorage(&quot;sql&quot;)
+		if err != nil {
+			return err
+		}
+		cfg.Storage = driver
+	}
+	// 确保包路径不会循环依赖
+	undo, err := gen.PrepareEnv(cfg)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			_ = undo()
+		}
+	}()
+	// 准备就绪,进入生成器方法
+	return generate(schemaPath, cfg)
+}
+</code></pre>
+<ol start=3>
+<li>生成入口<code>entc/entc.go:284</code>：</li>
+</ol>
+<pre><code class=language-go>func generate(schemaPath string, cfg *gen.Config) error {
+	// 构造Graph
+	graph, err := LoadGraph(schemaPath, cfg)
+	if err != nil {
+		// 如果开启了快照feature,则尝试恢复
+		if err := mayRecover(err, schemaPath, cfg); err != nil {
+			return err
+		}
+		// 尝试重新构造Graph
+		if graph, err = LoadGraph(schemaPath, cfg); err != nil {
+			return err
+		}
+	}
+	// 格式化包名('-' =&gt; '_')
+	if err := normalizePkg(cfg); err != nil {
+		return err
+	}
+	return graph.Gen()
+}
+</code></pre>
+<ol start=4>
+<li>构造Graph<code>entc/entc.go:27</code>:</li>
+</ol>
+<pre><code class=language-go>func LoadGraph(schemaPath string, cfg *gen.Config) (*gen.Graph, error) {
+	// 加载映射后的schema结构体
+	spec, err := (&amp;load.Config{Path: schemaPath}).Load()
+	if err != nil {
+		return nil, err
+	}
+	cfg.Schema = spec.PkgPath
+	if cfg.Package == &quot;&quot; {
+		// default package-path for codegen is one package
+		// before the schema package (`&lt;project&gt;/ent/schema`).
+		// 默认包名
+		cfg.Package = path.Dir(spec.PkgPath)
+	}
+	// 从schema中构造Graph
+	return gen.NewGraph(cfg, spec.Schemas...)
+}
+</code></pre>
+<ol start=5>
+<li>从schema路径加载Schema结构体<code>entc/load/load.go:49</code>：</li>
+</ol>
+<pre><code class=language-go>func (c *Config) Load() (*SchemaSpec, error) {
+	// Config初始化只有Path,这里的load()方法会加载出所有schema的name,
+	// 并返回schema包路径,用于buildTmpl渲染import
+  // load()方法使用了很多的ast知识，暂时忽略细节
+	pkgPath, err := c.load()
+	if err != nil {
+		return nil, fmt.Errorf(&quot;entc/load: load schema dir: %w&quot;, err)
+	}
+	if len(c.Names) == 0 {
+		return nil, fmt.Errorf(&quot;entc/load: no schema found in: %s&quot;, c.Path)
+	}
+	var b bytes.Buffer
+	// 构造可执行文件
+	err = buildTmpl.ExecuteTemplate(&amp;b, &quot;main&quot;, struct {
+		*Config
+		Package string
+	}{c, pkgPath})
+	if err != nil {
+		return nil, fmt.Errorf(&quot;entc/load: execute template: %w&quot;, err)
+	}
+	buf, err := format.Source(b.Bytes())
+	if err != nil {
+		return nil, fmt.Errorf(&quot;entc/load: format template: %w&quot;, err)
+	}
+	if err := os.MkdirAll(&quot;.entc&quot;, os.ModePerm); err != nil {
+		return nil, err
+	}
+	target := fmt.Sprintf(&quot;.entc/%s.go&quot;, filename(pkgPath))
+	if err := os.WriteFile(target, buf, 0644); err != nil {
+		return nil, fmt.Errorf(&quot;entc/load: write file %s: %w&quot;, target, err)
+	}
+	defer os.RemoveAll(&quot;.entc&quot;)
+	// 执行映射好的main文件,用于将schema下的schema definition文件序列化为[]byte,输出到std,
+	// 然后entc主进程收集main文件(target)的stdout，这里依赖go环境
+	out, err := run(target)
+	if err != nil {
+		return nil, err
+	}
+	spec := &amp;SchemaSpec{PkgPath: pkgPath}
+	// 将schema反序列化至spec结构体
+	for _, line := range strings.Split(out, &quot;\n&quot;) {
+		schema, err := UnmarshalSchema([]byte(line))
+		if err != nil {
+			return nil, fmt.Errorf(&quot;entc/load: unmarshal schema %s: %w&quot;, line, err)
+		}
+		spec.Schemas = append(spec.Schemas, schema)
+	}
+	return spec, nil
+}
+</code></pre>
+<ol start=6>
+<li>从Schema中构造Graph<code>entc/gen/graph.go:126</code>:</li>
+</ol>
+<pre><code class=language-go>func NewGraph(c *Config, schemas ...*load.Schema) (g *Graph, err error) {
+	defer catch(&amp;err)
+	g = &amp;Graph{c, make([]*Type, 0, len(schemas)), schemas}
+	// 构造节点
+	for i := range schemas {
+		g.addNode(schemas[i])
+	}
+	// 构造边,并添加到相应node
+	for i := range schemas {
+		g.addEdges(schemas[i])
+	}
+	// 解析关联
+	for _, t := range g.Nodes {
+		check(resolve(t), &quot;resolve %q relations&quot;, t.Name)
+	}
+	for _, t := range g.Nodes {
+		check(t.setupFKs(), &quot;set %q foreign-keys&quot;, t.Name)
+	}
+	// 构造索引
+	for i := range schemas {
+		g.addIndexes(schemas[i])
+	}
+	// 指定graph默认值,当前只有id type
+	g.defaults()
+	return
+}
+</code></pre>
+<p>6.1. 构造节点：</p>
+<pre><code class=language-go>// entc/gen/graph.go:126
+func (g *Graph) addNode(schema *load.Schema) {
+	// schema翻译为Type/Node/Ent
+	t, err := NewType(g.Config, schema)
+	check(err, &quot;create type %s&quot;, schema.Name)
+	g.Nodes = append(g.Nodes, t)
+}
+
+// entc/gen/type.go:191
+func NewType(c *Config, schema *load.Schema) (*Type, error) {
+	idType := c.IDType
+	if idType == nil {
+		idType = defaultIDType
+	}
+	typ := &amp;Type{
+		Config: c,
+		ID: &amp;Field{
+			cfg:  c,
+			Name: &quot;id&quot;,
+			def: &amp;load.Field{
+				Name: &quot;id&quot;,
+			},
+			Type:      idType,
+			StructTag: structTag(&quot;id&quot;, &quot;&quot;),
+		},
+		schema:      schema,
+		Name:        schema.Name,
+		Annotations: schema.Annotations,
+		Fields:      make([]*Field, 0, len(schema.Fields)),
+		fields:      make(map[string]*Field, len(schema.Fields)),
+		foreignKeys: make(map[string]struct{}),
+	}
+	if err := ValidSchemaName(typ.Name); err != nil {
+		return nil, err
+	}
+	for _, f := range schema.Fields {
+		tf := &amp;Field{
+			cfg:           c,
+			def:           f,
+			Name:          f.Name,
+			Type:          f.Info,
+			Unique:        f.Unique,
+			Position:      f.Position,
+			Nillable:      f.Nillable,
+			Optional:      f.Optional,
+			Default:       f.Default,
+			UpdateDefault: f.UpdateDefault,
+			Immutable:     f.Immutable,
+			StructTag:     structTag(f.Name, f.Tag),
+			Validators:    f.Validators,
+			UserDefined:   true,
+			Annotations:   f.Annotations,
+		}
+		if err := typ.checkField(tf, f); err != nil {
+			return nil, err
+		}
+		// User defined id field.
+    // 如果从schema中单独定义id字段，那么则id字段取用户自定义的
+		if tf.Name == typ.ID.Name {
+			typ.ID = tf
+		} else {
+			typ.Fields = append(typ.Fields, tf)
+			typ.fields[f.Name] = tf
+		}
+	}
+	return typ, nil
+}
+</code></pre>
+<p>6.2. 构造边,并添加到相应node<code>entc/gen/graph.go:259</code>:</p>
+<pre><code class=language-go>func (g *Graph) addEdges(schema *load.Schema) {
+	// 根据schema获取Type结构体
+	t, _ := g.typ(schema.Name)
+	seen := make(map[string]struct{}, len(schema.Edges))
+	for _, e := range schema.Edges {
+		typ, ok := g.typ(e.Type)
+		// edge的type必须在graph的nodes里
+		expect(ok, &quot;type %q does not exist for edge&quot;, e.Type)
+		_, ok = t.fields[e.Name]
+		// edge的名字不能与字段名相同
+		expect(!ok, &quot;%s schema can't contain field and edge with the same name %q&quot;, schema.Name, e.Name)
+		_, ok = seen[e.Name]
+		// 不能定义多个名字一样的edge
+		expect(!ok, &quot;%s schema contains multiple %q edges&quot;, schema.Name, e.Name)
+		seen[e.Name] = struct{}{}
+		switch {
+		// Assoc only.
+		// 正向关联,比如: edge.To(&quot;card&quot;, Card.Type).Unique()
+		case !e.Inverse:
+			t.Edges = append(t.Edges, &amp;Edge{
+				def:         e,
+				Type:        typ,
+				Name:        e.Name,
+				Owner:       t,
+				Unique:      e.Unique,
+				Optional:    !e.Required,
+				StructTag:   structTag(e.Name, e.Tag),
+				Annotations: e.Annotations,
+			})
+		// Inverse only.
+		// 反向关联,比如: edge.From(&quot;owner&quot;, User.Type).Ref(&quot;card&quot;)
+		case e.Inverse &amp;&amp; e.Ref == nil:
+			// 必须要指定RefName
+			expect(e.RefName != &quot;&quot;, &quot;missing reference name for inverse edge: %s.%s&quot;, t.Name, e.Name)
+			t.Edges = append(t.Edges, &amp;Edge{
+				def:         e,
+				Type:        typ,
+				Name:        e.Name,
+				Owner:       typ,
+				Inverse:     e.RefName,
+				Unique:      e.Unique,
+				Optional:    !e.Required,
+				StructTag:   structTag(e.Name, e.Tag),
+				Annotations: e.Annotations,
+			})
+		// Inverse and assoc.
+		// 仅同类型的edge会进入这里,比如:
+		// edge.To(&quot;following&quot;, User.Type).From(&quot;followers&quot;)
+		case e.Inverse:
+			// e.Ref 指正向边
+			ref := e.Ref
+			// 必须不指定Ref名字
+			expect(e.RefName == &quot;&quot;, &quot;reference name is derived from the assoc name: %s.%s &lt;-&gt; %s.%s&quot;, t.Name, ref.Name, t.Name, e.Name)
+			// 必须同类型
+			expect(ref.Type == t.Name, &quot;assoc-inverse edge allowed only as o2o relation of the same type&quot;)
+			// 因为是用一条语句表达了正反两条边,所以需要把两条边都加入切片
+			t.Edges = append(t.Edges, &amp;Edge{
+				def:         e,
+				Type:        typ,
+				Name:        e.Name,
+				Owner:       t,
+				Inverse:     ref.Name,
+				Unique:      e.Unique,
+				Optional:    !e.Required,
+				StructTag:   structTag(e.Name, e.Tag),
+				Annotations: e.Annotations,
+			}, &amp;Edge{
+				def:         ref,
+				Type:        typ,
+				Owner:       t,
+				Name:        ref.Name,
+				Unique:      ref.Unique,
+				Optional:    !ref.Required,
+				StructTag:   structTag(ref.Name, ref.Tag),
+				Annotations: ref.Annotations,
+			})
+		default:
+			panic(graphError{&quot;edge must be either an assoc or inverse edge&quot;})
+		}
+	}
+}
+</code></pre>
+<p>6.3 解析关联<code>entc/gen/graph.go:365</code>：</p>
+<pre><code class=language-go>func resolve(t *Type) error {
+	for _, e := range t.Edges {
+		switch {
+		// 反向边
+		case e.IsInverse():
+			// 必须从e的node下的edges中找到相反的edge结构体
+			ref, ok := e.Type.HasAssoc(e.Inverse)
+			if !ok {
+				return fmt.Errorf(&quot;edge %q is missing for inverse edge: %s.%s(%s)&quot;, e.Inverse, t.Name, e.Name, e.Type.Name)
+			}
+			// 两条边不能同时设为required
+			if !e.Optional &amp;&amp; !ref.Optional {
+				return fmt.Errorf(&quot;edges cannot be required in both directions: %s.%s &lt;-&gt; %s.%s&quot;, t.Name, e.Name, e.Type.Name, ref.Name)
+			}
+			// 检查类型一致性
+			if ref.Type != t {
+				return fmt.Errorf(&quot;mismatch type for back-ref %q of %s.%s &lt;-&gt; %s.%s&quot;, e.Inverse, t.Name, e.Name, e.Type.Name, ref.Name)
+			}
+			// 设置edge的ref
+			e.Ref, ref.Ref = ref, e
+			// table 指的是需要加外键的表名
+			table := t.Table()
+			// Name the foreign-key column in a format that wouldn't change even if an inverse
+			// edge is dropped (or added). The format is: &quot;&lt;Edge-Owner&gt;_&lt;Edge-Name&gt;&quot;.
+			// 以固定格式命名,即时反向也不会变
+			column := fmt.Sprintf(&quot;%s_%s&quot;, e.Type.Label(), snake(ref.Name))
+			// 确定关联类型
+			switch a, b := ref.Unique, e.Unique; {
+			// If the relation column is in the inverse side/table. The rule is simple, if assoc is O2M,
+			// then inverse is M2O and the relation is in its table.
+			case a &amp;&amp; b:
+				e.Rel.Type, ref.Rel.Type = O2O, O2O
+			case !a &amp;&amp; b:
+				e.Rel.Type, ref.Rel.Type = M2O, O2M
+
+			// If the relation column is in the assoc side.
+			case a &amp;&amp; !b:
+				e.Rel.Type, ref.Rel.Type = O2M, M2O
+				table = e.Type.Table()
+
+			case !a &amp;&amp; !b:
+				e.Rel.Type, ref.Rel.Type = M2M, M2M
+				table = e.Type.Label() + &quot;_&quot; + ref.Name
+				c1, c2 := ref.Owner.Label()+&quot;_id&quot;, ref.Type.Label()+&quot;_id&quot;
+				// If the relation is from the same type: User has Friends ([]User).
+				// give the second column a different name (the relation name).
+				if c1 == c2 {
+					c2 = rules.Singularize(e.Name) + &quot;_id&quot;
+				}
+				e.Rel.Columns = []string{c1, c2}
+				ref.Rel.Columns = []string{c1, c2}
+			}
+			e.Rel.Table, ref.Rel.Table = table, table
+			if !e.M2M() {
+				e.Rel.Columns = []string{column}
+				ref.Rel.Columns = []string{column}
+			}
+		// Assoc with uninitialized relation.
+		case !e.IsInverse() &amp;&amp; e.Rel.Type == Unk:
+			switch {
+			case !e.Unique &amp;&amp; e.Type == t:
+				e.Rel.Type = M2M
+				e.Bidi = true
+				e.Rel.Table = t.Label() + &quot;_&quot; + e.Name
+				e.Rel.Columns = []string{e.Owner.Label() + &quot;_id&quot;, rules.Singularize(e.Name) + &quot;_id&quot;}
+			case e.Unique &amp;&amp; e.Type == t:
+				e.Rel.Type = O2O
+				e.Bidi = true
+				e.Rel.Table = t.Table()
+			case e.Unique:
+				e.Rel.Type = M2O
+				e.Rel.Table = t.Table()
+			default:
+				e.Rel.Type = O2M
+				e.Rel.Table = e.Type.Table()
+			}
+			if !e.M2M() {
+				e.Rel.Columns = []string{fmt.Sprintf(&quot;%s_%s&quot;, t.Label(), snake(e.Name))}
+			}
+		}
+	}
+	return nil
+}
+</code></pre>
+<ol start=7>
+<li>根据Graph生成真正文件<code>entc/gen/graph.go:179</code>：</li>
+</ol>
+<pre><code class=language-go>func (g *Graph) Gen() error {
+	// 构造生成器
+	var gen Generator = GenerateFunc(generate)
+	// 叠加hook
+	for i := len(g.Hooks) - 1; i &gt;= 0; i-- {
+		gen = g.Hooks[i](gen)
+	}
+	return gen.Generate(g)
+}
+
+// generate is the default Generator implementation.
+func generate(g *Graph) error {
+	var (
+		assets   assets
+		external []GraphTemplate
+	)
+	// 获取root templates和全局拓展模板
+	templates, external = g.templates()
+	// 从node开始遍历
+	for _, n := range g.Nodes {
+		assets.dirs = append(assets.dirs, filepath.Join(g.Config.Target, n.Package()))
+		// 逐个模板生成
+		for _, tmpl := range Templates {
+			b := bytes.NewBuffer(nil)
+			if err := templates.ExecuteTemplate(b, tmpl.Name, n); err != nil {
+				return fmt.Errorf(&quot;execute template %q: %w&quot;, tmpl.Name, err)
+			}
+			assets.files = append(assets.files, file{
+				path:    filepath.Join(g.Config.Target, tmpl.Format(n)),
+				content: b.Bytes(),
+			})
+		}
+	}
+	// 全局模板和全局拓展模板生成
+	for _, tmpl := range append(GraphTemplates, external...) {
+		if tmpl.Skip != nil &amp;&amp; tmpl.Skip(g) {
+			continue
+		}
+		if dir := filepath.Dir(tmpl.Format); dir != &quot;.&quot; {
+			assets.dirs = append(assets.dirs, filepath.Join(g.Config.Target, dir))
+		}
+		b := bytes.NewBuffer(nil)
+		if err := templates.ExecuteTemplate(b, tmpl.Name, g); err != nil {
+			return fmt.Errorf(&quot;execute template %q: %w&quot;, tmpl.Name, err)
+		}
+		assets.files = append(assets.files, file{
+			path:    filepath.Join(g.Config.Target, tmpl.Format),
+			content: b.Bytes(),
+		})
+	}
+	// 删掉不需要的Features相关文件
+	for _, f := range AllFeatures {
+		if f.cleanup == nil || g.featureEnabled(f) {
+			continue
+		}
+		if err := f.cleanup(g.Config); err != nil {
+			return fmt.Errorf(&quot;cleanup %q feature assets: %w&quot;, f.Name, err)
+		}
+	}
+	// Write and format assets only if template execution
+	// finished successfully.
+	if err := assets.write(); err != nil {
+		return err
+	}
+	// We can't run &quot;imports&quot; on files when the state is not completed.
+	// Because, &quot;goimports&quot; will drop undefined package. Therefore, it's
+	// suspended to the end of the writing.
+	return assets.format()
+}
+
+</code></pre>
+<p>至此，entc完成了代码生成的全部工作，由此可以看出，entc并未真正有关于orm的操作，所以可以把entc称为ent前端。entc generate的流程大致可以有如下表示：</p>
+<ol>
+<li>将我们写好的schema转化为entc所需要的graph结构</li>
+<li>确定此次生成器需要的模板</li>
+<li>逐个生成orm文件</li>
+</ol>
+</div>
+<div class=article-footer>
+<blockquote class=mt-2x>
+<ul class="post-copyright list-unstyled">
+<li class="post-copyright-link hidden-xs">
+<strong>本文链接: </strong>
+<a href=https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/ title="ent分析-ent codegen" target=_blank rel=external>https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/</a>
+</li>
+<li class=post-copyright-license>
+<strong>License: </strong>
+<a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>CC BY 4.0 CN</a>
+</li>
+</ul>
+</blockquote>
+<div class="panel panel-default panel-badger">
+<div class=panel-body>
+<figure class=media>
+<div class=media-left>
+<a href=https://github.com/yoogoc target=_blank class="img-burn thumb-sm visible-lg">
+<img src=https://blog.yoogo.top/sites-images/Avatar200.png class="img-rounded w-full" alt>
+</a>
+</div>
+<div class=media-body>
+<h3 class=media-heading><a href=https://github.com/yoogoc target=_blank><span class=text-dark>yoogo</span><small class=ml-1x>多读书，少放炮</small></a></h3>
+<div>我书读的不多，想的却不少</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</article>
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+<div class=bar-inner>
+<ul class="pager pull-left">
+<li class=prev>
+<a href=https://blog.yoogo.top/2021/06/ingress-nginx%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/ title=ingress-nginx是如何工作的><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a>
+</li>
+<li class=toggle-toc>
+<a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button>
+<span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i>
+<i class="text-in icon icon-close"></i>
+<span>]</span>
+</a>
+</li>
+</ul>
+<div class=bar-right>
+<div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div>
+</div>
+</div>
+</nav>
+</main><footer class=footer itemscope itemtype=http://schema.org/WPFooter>
+<ul class=social-links>
+<li><a href=https://github.com/yoogoc target=_blank title=github data-toggle=tooltip data-placement=top>
+<i class="icon icon-github"></i></a></li>
+<li><a href=https://blog.yoogo.top/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top>
+<i class="icon icon-rss"></i></a></li>
+</ul>
+<div class=copyright>
+&copy;2018 -
+2021
+<div class=publishby>
+Theme by <a href=https://github.com/xiaoheiAh target=_blank> xiaoheiAh </a>base on<a href=https://github.com/xiaoheiAh/hugo-theme-pure target=_blank> pure</a>.
+</div>
+</div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+<script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script>
+<script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script>
+<script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script>
+<script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js defer></script>
+<script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js defer></script><script>hljs.configure({tabReplace:'    ',classPrefix:''}),hljs.initHighlightingOnLoad()</script>
+<script src=https://blog.yoogo.top/js/application.min.a94ab19cb63a95c8d7fbd7b85cab3ddeea8c369bdf75b9cab6708787ead123af.js></script>
+<script src=https://blog.yoogo.top/js/plugin.min.19c5bcb2fb0789ab4f2b7834e5ceb5e92635645605bab902c1024b25f1502364.js></script>
+<script>(function(a){var b={TRANSLATION:{POSTS:'文章',PAGES:'页面',CATEGORIES:'分类',TAGS:'标签',UNTITLED:'(未命名)'},ROOT_URL:'https://blog.yoogo.top/',CONTENT_URL:'https://blog.yoogo.top//searchindex.json '};a.INSIGHT_CONFIG=b})(window)</script>
+<script type=text/javascript src=https://blog.yoogo.top/js/insight.min.4a2d52de4bfff73e0c688404fe3d17c9a3ae12d9888e1e1ac9c690e4890de2ded50fe55f2b819c2ba55435a76f396f3ea6805765f0b0af5635cdf74ea459eab0.js defer></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script>
+<script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:!0})</script>
+<script type=text/javascript src=https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js></script>
+<script type=text/javascript src=/js/opt-mermaid.js></script>
+</body>
+</html>
