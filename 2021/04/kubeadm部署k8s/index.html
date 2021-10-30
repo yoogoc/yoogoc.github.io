@@ -1,7 +1,7 @@
 <!doctype html><html lang=zh>
 <head>
 <title>
-kubeadm部署k8s(todo) - yoogo
+kubeadm部署k8s - yoogo
 </title>
 <meta charset=utf-8>
 <meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
@@ -14,26 +14,26 @@ kubeadm部署k8s(todo) - yoogo
 <meta name=format-detection content="telephone=no,email=no,adress=no">
 <meta name=theme-color content="#000000">
 <meta http-equiv=window-target content="_top">
-<meta name=description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 安装 kubeadm、kubelet 和 kubectl 更新 apt 包索引并安装使用 Kubernetes apt 仓库">
+<meta name=description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep">
 <meta name=generator content="Hugo 0.88.1 with theme pure">
-<title>kubeadm部署k8s(todo) - yoogo</title>
+<title>kubeadm部署k8s - yoogo</title>
 <link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css>
 <link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async>
 <link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async>
 <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async>
-<meta property="og:title" content="kubeadm部署k8s(todo)">
-<meta property="og:description" content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 安装 kubeadm、kubelet 和 kubectl 更新 apt 包索引并安装使用 Kubernetes apt 仓库">
+<meta property="og:title" content="kubeadm部署k8s">
+<meta property="og:description" content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2021-04-18T15:57:00+00:00">
 <meta property="article:modified_time" content="2021-04-18T15:57:00+00:00">
-<meta itemprop=name content="kubeadm部署k8s(todo)">
-<meta itemprop=description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 安装 kubeadm、kubelet 和 kubectl 更新 apt 包索引并安装使用 Kubernetes apt 仓库"><meta itemprop=datePublished content="2021-04-18T15:57:00+00:00">
+<meta itemprop=name content="kubeadm部署k8s">
+<meta itemprop=description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep"><meta itemprop=datePublished content="2021-04-18T15:57:00+00:00">
 <meta itemprop=dateModified content="2021-04-18T15:57:00+00:00">
-<meta itemprop=wordCount content="176">
+<meta itemprop=wordCount content="984">
 <meta itemprop=keywords content="k8s,"><meta name=twitter:card content="summary">
-<meta name=twitter:title content="kubeadm部署k8s(todo)">
-<meta name=twitter:description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 安装 kubeadm、kubelet 和 kubectl 更新 apt 包索引并安装使用 Kubernetes apt 仓库"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<meta name=twitter:title content="kubeadm部署k8s">
+<meta name=twitter:description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
 <script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]-->
 </head>
 <body class="main-center theme-black" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader>
@@ -226,7 +226,7 @@ kubeadm部署k8s(todo) - yoogo
 <li>
 <div class=item-inner>
 <p class=item-title>
-<a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ class=title>kubeadm部署k8s(todo)</a>
+<a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ class=title>kubeadm部署k8s</a>
 </p>
 <p class=item-date>
 <time datetime="2021-04-18 15:57:00 +0000 UTC" itemprop=datePublished>2021-04-18</time>
@@ -249,7 +249,7 @@ kubeadm部署k8s(todo) - yoogo
 <article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting>
 <div class=article-header>
 <h1 itemprop=name>
-<a class=article-title href=/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/>kubeadm部署k8s(todo)</a>
+<a class=article-title href=/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/>kubeadm部署k8s</a>
 </h1>
 <div class=article-meta>
 <span class=article-date>
@@ -262,14 +262,93 @@ kubeadm部署k8s(todo) - yoogo
 <i class="icon icon-tags"></i>&nbsp;
 <a class=article-tag-link href=/tags/k8s/> k8s </a>
 </span>
-<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 176字</span>
-<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 1分 </span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 984字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 2分 </span>
 </div>
 </div>
 <div class="article-entry marked-body js-toc-content" itemprop=articleBody>
 <h1 id=按照官网检查required>按照官网检查required</h1>
 <p><a href=https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/>https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/</a></p>
 <p>此次使用ubuntu2004 kvm作为主机</p>
+<h2 id=检查iptables>检查iptables</h2>
+<pre><code class=language-sh># 检查是否加载模块br_netfilter
+lsmod | grep br_netfilter
+# 开启
+sudo modprobe br_netfilter
+</code></pre>
+<p>iptables 能够正确地查看桥接流量：</p>
+<pre><code class=language-sh>cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
+
+swapoff -a &amp;&amp; sysctl -w vm.swappiness=0
+sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab
+
+apt remove -y ufw lxd lxd-client lxcfs lxc-common
+</code></pre>
+<h2 id=安装-runtime>安装 runtime</h2>
+<p>目前可用的运行时：</p>
+<table>
+<thead>
+<tr>
+<th>运行时</th>
+<th>域套接字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker</td>
+<td>/var/run/dockershim.sock</td>
+</tr>
+<tr>
+<td>containerd</td>
+<td>/run/containerd/containerd.sock</td>
+</tr>
+<tr>
+<td>CRI-O</td>
+<td>/var/run/crio/crio.sock</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果同时检测到 Docker 和 containerd，则优先选择 Docker</p>
+</blockquote>
+<p>这里使用containerd：</p>
+<pre><code class=language-sh>sudo apt-get update
+# 会依赖安装runc
+sudo apt-get install containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+</code></pre>
+<p>结合 runc 使用 systemd cgroup 驱动，在 /etc/containerd/config.toml 中设置</p>
+<pre><code class=language-sh>[plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc]
+  ...
+  [plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc.options]
+    SystemdCgroup = true
+    
+[plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry]
+  ...
+  [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry.mirrors]
+    [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry.mirrors.&quot;docker.io&quot;]
+      endpoint = [&quot;https://30l6yhjq.mirror.aliyuncs.com&quot;]
+</code></pre>
+<p>设置启动文件</p>
+<pre><code class=language-sh>wget https://github.com/containerd/containerd/archive/v1.5.7.tar.gz
+tar xvf v1.5.7.tar.gz &amp;&amp; cd containerd-1.5.7
+cp containerd.service /etc/systemd/system/
+</code></pre>
+<p>启动</p>
+<pre><code class=language-sh>systemctl daemon-reload
+systemctl enable containerd.service
+systemctl start containerd.service
+systemctl status containerd.service
+</code></pre>
 <h1 id=安装-kubeadmkubelet-和-kubectl>安装 kubeadm、kubelet 和 kubectl</h1>
 <ol>
 <li>更新 <code>apt</code> 包索引并安装使用 Kubernetes <code>apt</code> 仓库所需要的包：</li>
@@ -281,21 +360,22 @@ sudo apt-get install -y apt-transport-https ca-certificates curl
 <li>
 <p>添加apt仓库</p>
 <p>a. 可以访问外网的情况：</p>
-<pre><code></code></pre>
-</li>
-</ol>
-<p>sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg <a href=https://packages.cloud.google.com/apt/doc/apt-key.gpg>https://packages.cloud.google.com/apt/doc/apt-key.gpg</a>
-echo &ldquo;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] <a href=https://apt.kubernetes.io/>https://apt.kubernetes.io/</a> kubernetes-xenial main&rdquo; | sudo tee /etc/apt/sources.list.d/kubernetes.list
-```</p>
-<pre><code>b. 不能访问外网，使用阿里源：
-
-```
-curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-echo &quot;deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-```
+<pre><code>sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo &quot;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
 </code></pre>
-<ol start=3>
+<p>b. 不能访问外网，使用阿里源：</p>
+<pre><code class=language-sh>curl -s https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+deb https://mirrors.aliyun.com/kubernetes/apt kubernetes-xenial main
+EOF
+</code></pre>
+<p>开源社源（我用404）：</p>
+<pre><code class=language-sh>curl -s https://mirror.azure.cn/kubernetes/packages/apt/doc/apt-key.gpg | sudo apt-key add -
+cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+deb http://mirror.azure.cn/kubernetes/packages/apt/ kubernetes-xenial main
+EOF
+</code></pre>
+</li>
 <li>
 <p>更新apt</p>
 <pre><code>sudo apt-get update
@@ -303,14 +383,103 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 </code></pre>
 </li>
+<li>
+<p>创建kubeadm config</p>
+</li>
 </ol>
+<pre><code class=language-sh>kind: ClusterConfiguration
+apiVersion: kubeadm.k8s.io/v1beta3
+# kubernetesVersion: v1.22.3
+imageRepository: registry.aliyuncs.com/google_containers
+controlPlaneEndpoint: '192.168.1.141:6443'
+
+apiServer:
+  extraArgs:
+    authorization-mode: Node,RBAC
+  timeoutForControlPlane: 4m0s
+
+networking:
+  serviceSubnet: '10.96.0.0/12' # default
+  podSubnet: &quot;10.244.0.0/16&quot;
+  dnsDomain: 'cluster.local' # default
+
+controllerManager: {}
+
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+
+certificatesDir: /etc/kubernetes/pki
+
+---
+kind: InitConfiguration
+apiVersion: kubeadm.k8s.io/v1beta3
+nodeRegistration:
+  kubeletExtraArgs:
+    pod-infra-container-image: 'registry.aliyuncs.com/google_containers/pause:3.5'
+    network-plugin: cni
+    v: '9'
+
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: ipvs
+
+---
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
+#cgroupDriver: cgroupfs
+</code></pre>
+<ol start=5>
+<li>初始化</li>
+</ol>
+<pre><code class=language-sh>kubeadm init --config kubeadm-init-config.yaml -v 20
+</code></pre>
+<ol start=6>
+<li>等待初始化完成,完成后检查k8s状态</li>
+</ol>
+<pre><code class=language-sh># 获取组件状态
+kubectl get cs
+</code></pre>
+<blockquote>
+<p>因为kubeadm会默认不开启scheduler和controller-manager的http接口，因此可能会Unhealthy，解决：注释掉<code>/etc/kubernetes/manifests/kube-scheduler.yaml</code>,<code>/etc/kubernetes/manifests/kube-controller-manager.yaml</code> 中<code>port=0</code>字段，重启kubelet</p>
+</blockquote>
+<pre><code class=language-sh># 获取节点状态
+kubectl get node
+kubectl describe nodes
+</code></pre>
+<p>此时节点是NotReady状态的，原因可以通过<code>kubectl describe nodes</code>中Conditions的得到：</p>
+<pre><code class=language-sh>Conditions:
+  Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----             ------  -----------------                 ------------------                ------                       -------
+  MemoryPressure   False   Sat, 30 Oct 2021 01:19:42 +0000   Fri, 29 Oct 2021 16:21:57 +0000   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure     False   Sat, 30 Oct 2021 01:19:42 +0000   Fri, 29 Oct 2021 16:21:57 +0000   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure      False   Sat, 30 Oct 2021 01:19:42 +0000   Fri, 29 Oct 2021 16:21:57 +0000   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready            False   Sat, 30 Oct 2021 01:19:42 +0000   Fri, 29 Oct 2021 16:21:57 +0000   KubeletNotReady              container runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:Network plugin returns error: cni plugin not initialized
+</code></pre>
+<p>因为没有cni插件，所以会NotReady</p>
+<ol start=7>
+<li>安装最先进的cni插件-cilium</li>
+</ol>
+<pre><code class=language-sh>curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-amd64.tar.gz{,.sha256sum}
+sha256sum --check cilium-linux-amd64.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+rm cilium-linux-amd64.tar.gz{,.sha256sum}
+
+cilium install
+
+# 等待安装完成
+cilium status
+kubectl get node
+</code></pre>
 </div>
 <div class=article-footer>
 <blockquote class=mt-2x>
 <ul class="post-copyright list-unstyled">
 <li class="post-copyright-link hidden-xs">
 <strong>本文链接: </strong>
-<a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ title=kubeadm部署k8s(todo) target=_blank rel=external>https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/</a>
+<a href=https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/ title=kubeadm部署k8s target=_blank rel=external>https://blog.yoogo.top/2021/04/kubeadm%E9%83%A8%E7%BD%B2k8s/</a>
 </li>
 <li class=post-copyright-license>
 <strong>License: </strong>
