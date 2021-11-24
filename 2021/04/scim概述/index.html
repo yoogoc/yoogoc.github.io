@@ -15,7 +15,7 @@ scim 翻译 - yoogo
 <meta name=theme-color content="#000000">
 <meta http-equiv=window-target content="_top">
 <meta name=description content="跨域身份管理系统 SCIM 2，用于管理身份的开放API现已完成，并在IETF下发布。 概述 跨域身份管理系统(SCIM)规范旨在使基于云的应用和服务中的">
-<meta name=generator content="Hugo 0.88.1 with theme pure">
+<meta name=generator content="Hugo 0.89.4 with theme pure">
 <title>scim 翻译 - yoogo</title>
 <link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css>
 <link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async>
@@ -349,7 +349,7 @@ scim 翻译 - yoogo
 <li><strong>Replace:</strong> PUT <a href=https://example.com/%7Bv%7D/%7Bresource%7D/%7Bid%7D>https://example.com/{v}/{resource}/{id}</a></li>
 <li><strong>Delete:</strong> DELETE <a href=https://example.com/%7Bv%7D/%7Bresource%7D/%7Bid%7D>https://example.com/{v}/{resource}/{id}</a></li>
 <li><strong>Update:</strong> PATCH <a href=https://example.com/%7Bv%7D/%7Bresource%7D/%7Bid%7D>https://example.com/{v}/{resource}/{id}</a></li>
-<li><strong>Search:</strong> GET <a href=https://example.com/%7Bv%7D/%7Bresource%7D?>https://example.com/{v}/{resource}?</a>ﬁlter={attribute}{op}{value}&sortBy={attributeName}&sortOrder={ascending|descending}</li>
+<li><strong>Search:</strong> GET <a href=https://example.com/%7Bv%7D/%7Bresource%7D>https://example.com/{v}/{resource}</a>?ﬁlter={attribute}{op}{value}&sortBy={attributeName}&sortOrder={ascending|descending}</li>
 <li><strong>Bulk:</strong> POST <a href=https://example.com/%7Bv%7D/Bulk>https://example.com/{v}/Bulk</a></li>
 </ul>
 <h2 id=discovery>Discovery</h2>
@@ -457,8 +457,8 @@ ETag: W/&quot;f250dd84f0671c3&quot;
 <p>除了获取单个资源外，还可以通过查询资源端点来获取资源集，而无需特定资源的id。通常情况下，获取请求会包含一个应用于资源的过滤器。SCIM 支持等价、包含、开始与等过滤操作。除了过滤响应外，还可以要求服务提供商对响应中的资源进行排序。</p>
 <p>除了过滤响应外，还可以要求服务提供商对响应中的资源进行排序，返回资源的特定属性，以及只返回资源的子集。</p>
 <ul>
-<li><a href=https://example.com/%7Bresource%7D?>https://example.com/{resource}?</a>ﬁlter={attribute} {op} {value} & sortBy={attributeName}&sortOrder={ascending|descending}&attributes={attributes}</li>
-<li><a href=https://example.com/Users?>https://example.com/Users?</a>ﬁlter=title pr and userType eq “Employee”&sortBy=title&sortOrder=ascending&attributes=title,username</li>
+<li><a href=https://example.com/%7Bresource%7D>https://example.com/{resource}</a>?ﬁlter={attribute} {op} {value} & sortBy={attributeName}&sortOrder={ascending|descending}&attributes={attributes}</li>
+<li><a href=https://example.com/Users>https://example.com/Users</a>?ﬁlter=title pr and userType eq “Employee”&sortBy=title&sortOrder=ascending&attributes=title,username</li>
 </ul>
 <h2 id=filter-response>Filter Response</h2>
 <p>响应是一个匹配资源的列表。</p>
@@ -614,5 +614,7 @@ Theme by <a href=https://github.com/xiaoheiAh target=_blank> xiaoheiAh </a>base 
 <script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:!0})</script>
 <script type=text/javascript src=https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js></script>
 <script type=text/javascript src=/js/opt-mermaid.js></script>
+<script id=LA_COLLECT src=//sdk.51.la/js-sdk-pro.min.js></script>
+<script>LA.init({id:"JVnj1Z6jp0t62WHS",ck:"JVnj1Z6jp0t62WHS"})</script>
 </body>
 </html>

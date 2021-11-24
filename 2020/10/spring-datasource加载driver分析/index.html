@@ -15,7 +15,7 @@ java学习笔记-spring datasource加载driver分析 - yoogo
 <meta name=theme-color content="#000000">
 <meta http-equiv=window-target content="_top">
 <meta name=description content="默认HikariDataSource 创建测试项目，引入相关包 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-jdbc&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.h2database&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;h2&amp;lt;/artifactId&amp;gt; &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.postgresql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;postgresql&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;42.2.17&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; spring boot会在启动时DataSourceConfig">
-<meta name=generator content="Hugo 0.88.1 with theme pure">
+<meta name=generator content="Hugo 0.89.4 with theme pure">
 <title>java学习笔记-spring datasource加载driver分析 - yoogo</title>
 <link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css>
 <link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async>
@@ -293,29 +293,29 @@ java学习笔记-spring datasource加载driver分析 - yoogo
 <p>spring boot会在启动时DataSourceConfiguration.class,由于spring-boot-starter-jdbc中包含hikari包，则会加载HikariDataSource：</p>
 <pre><code class=language-java>// source in: DataSourceConfiguration.java#static class Hikari
 	/**
-  * Hikari DataSource configuration.
-  */
+	 * Hikari DataSource configuration.
+	 */
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnClass(HikariDataSource.class)
 	@ConditionalOnMissingBean(DataSource.class)
 	@ConditionalOnProperty(name = &quot;spring.datasource.type&quot;, havingValue = &quot;com.zaxxer.hikari.HikariDataSource&quot;,
-         matchIfMissing = true)
+			matchIfMissing = true)
 	static class Hikari {
 
-     @Bean
-     @ConfigurationProperties(prefix = &quot;spring.datasource.hikari&quot;)
-     HikariDataSource dataSource(DataSourceProperties properties) {
-         HikariDataSource dataSource = createDataSource(properties, HikariDataSource.class);
-         if (StringUtils.hasText(properties.getName())) {
-             dataSource.setPoolName(properties.getName());
-         }
-         return dataSource;
-     }
+		@Bean
+		@ConfigurationProperties(prefix = &quot;spring.datasource.hikari&quot;)
+		HikariDataSource dataSource(DataSourceProperties properties) {
+			HikariDataSource dataSource = createDataSource(properties, HikariDataSource.class);
+			if (StringUtils.hasText(properties.getName())) {
+				dataSource.setPoolName(properties.getName());
+			}
+			return dataSource;
+		}
 	}
 
 </code></pre>
 <pre><code class=language-java> protected static &lt;T&gt; T createDataSource(DataSourceProperties properties, Class&lt;? extends DataSource&gt; type) {
-     return (T) properties.initializeDataSourceBuilder().type(type).build();
+ 	return (T) properties.initializeDataSourceBuilder().type(type).build();
  }
 </code></pre>
 <p>``</p>
@@ -326,8 +326,8 @@ java学习笔记-spring datasource加载driver分析 - yoogo
 <li>
 <p>进入DataSourceProperties#initializeDataSourceBuilder方法，这里会真正的创建DataSource</p>
 <pre><code class=language-java>	public DataSourceBuilder&lt;?&gt; initializeDataSourceBuilder() {
-     return DataSourceBuilder.create(getClassLoader()).type(getType()).driverClassName(determineDriverClassName())
-             .url(determineUrl()).username(determineUsername()).password(determinePassword());
+		return DataSourceBuilder.create(getClassLoader()).type(getType()).driverClassName(determineDriverClassName())
+				.url(determineUrl()).username(determineUsername()).password(determinePassword());
 	}
 </code></pre>
 <p>a. 通过<code>getClassLoader()).type(getType())</code>加载出HikariDataSource</p>
@@ -336,22 +336,22 @@ java学习笔记-spring datasource加载driver分析 - yoogo
 <li>
 <p>由上代码可以知道determineDriverClassName()方法中会有确定驱动的算法</p>
 <pre><code class=language-java>public String determineDriverClassName() {
-     if (StringUtils.hasText(this.driverClassName)) {
-         Assert.state(driverClassIsLoadable(), () -&gt; &quot;Cannot load driver class: &quot; + this.driverClassName);
-         return this.driverClassName;
-     }
-     String driverClassName = null;
-     if (StringUtils.hasText(this.url)) {
-         driverClassName = DatabaseDriver.fromJdbcUrl(this.url).getDriverClassName();
-     }
-     if (!StringUtils.hasText(driverClassName)) {
-         driverClassName = this.embeddedDatabaseConnection.getDriverClassName();
-     }
-     if (!StringUtils.hasText(driverClassName)) {
-         throw new DataSourceBeanCreationException(&quot;Failed to determine a suitable driver class&quot;, this,
-                 this.embeddedDatabaseConnection);
-     }
-     return driverClassName;
+		if (StringUtils.hasText(this.driverClassName)) {
+			Assert.state(driverClassIsLoadable(), () -&gt; &quot;Cannot load driver class: &quot; + this.driverClassName);
+			return this.driverClassName;
+		}
+		String driverClassName = null;
+		if (StringUtils.hasText(this.url)) {
+			driverClassName = DatabaseDriver.fromJdbcUrl(this.url).getDriverClassName();
+		}
+		if (!StringUtils.hasText(driverClassName)) {
+			driverClassName = this.embeddedDatabaseConnection.getDriverClassName();
+		}
+		if (!StringUtils.hasText(driverClassName)) {
+			throw new DataSourceBeanCreationException(&quot;Failed to determine a suitable driver class&quot;, this,
+					this.embeddedDatabaseConnection);
+		}
+		return driverClassName;
 	}
 </code></pre>
 <p>显而易见的算法：</p>
@@ -366,13 +366,13 @@ java学习笔记-spring datasource加载driver分析 - yoogo
 <li>
 <p>properties.initializeDataSourceBuilder().type(type).build() =》</p>
 <pre><code class=language-java>private void bind(DataSource result) {
-     ConfigurationPropertySource source = new MapConfigurationPropertySource(this.properties);
-     ConfigurationPropertyNameAliases aliases = new ConfigurationPropertyNameAliases();
-     aliases.addAliases(&quot;driver-class-name&quot;, &quot;driver-class&quot;);
-     aliases.addAliases(&quot;url&quot;, &quot;jdbc-url&quot;);
-     aliases.addAliases(&quot;username&quot;, &quot;user&quot;);
-     Binder binder = new Binder(source.withAliases(aliases));
-     binder.bind(ConfigurationPropertyName.EMPTY, Bindable.ofInstance(result));
+		ConfigurationPropertySource source = new MapConfigurationPropertySource(this.properties);
+		ConfigurationPropertyNameAliases aliases = new ConfigurationPropertyNameAliases();
+		aliases.addAliases(&quot;driver-class-name&quot;, &quot;driver-class&quot;);
+		aliases.addAliases(&quot;url&quot;, &quot;jdbc-url&quot;);
+		aliases.addAliases(&quot;username&quot;, &quot;user&quot;);
+		Binder binder = new Binder(source.withAliases(aliases));
+		binder.bind(ConfigurationPropertyName.EMPTY, Bindable.ofInstance(result));
 	}
 </code></pre>
 </li>
@@ -500,5 +500,7 @@ Theme by <a href=https://github.com/xiaoheiAh target=_blank> xiaoheiAh </a>base 
 <script>tocbot.init({tocSelector:'.js-toc',contentSelector:'.js-toc-content',headingSelector:'h1, h2, h3',hasInnerContainers:!0})</script>
 <script type=text/javascript src=https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js></script>
 <script type=text/javascript src=/js/opt-mermaid.js></script>
+<script id=LA_COLLECT src=//sdk.51.la/js-sdk-pro.min.js></script>
+<script>LA.init({id:"JVnj1Z6jp0t62WHS",ck:"JVnj1Z6jp0t62WHS"})</script>
 </body>
 </html>
