@@ -34,3 +34,9 @@ date: 2020-09-08 21:24:00
 
    e. postman
 
+7. cheatsheet
+8. snipaste
+9. magnet
+10. alfred
+11. iina
+12. upaste
