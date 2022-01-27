@@ -62,13 +62,20 @@ containerd config default | sudo tee /etc/containerd/config.toml
 ```
 
 结合 runc 使用 systemd cgroup 驱动，在 /etc/containerd/config.toml 中设置
+```sh
+...
+[plugins."io.containerd.grpc.v1.cri"]
+  ...
+  sandbox_image = "registry.aliyuncs.com/google_containers/pause:3.5"
+  ...
+```
 
 ```sh
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
   ...
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
     SystemdCgroup = true
-    
+
 [plugins."io.containerd.grpc.v1.cri".registry]
   ...
   [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
