@@ -15,7 +15,7 @@ kubeadm部署k8s - yoogo
 <meta name=theme-color content="#000000">
 <meta http-equiv=window-target content="_top">
 <meta name=description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep">
-<meta name=generator content="Hugo 0.89.4 with theme pure">
+<meta name=generator content="Hugo 0.92.0 with theme pure">
 <title>kubeadm部署k8s - yoogo</title>
 <link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css>
 <link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async>
@@ -30,7 +30,7 @@ kubeadm部署k8s - yoogo
 <meta itemprop=name content="kubeadm部署k8s">
 <meta itemprop=description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep"><meta itemprop=datePublished content="2021-04-18T15:57:00+00:00">
 <meta itemprop=dateModified content="2021-04-18T15:57:00+00:00">
-<meta itemprop=wordCount content="984">
+<meta itemprop=wordCount content="991">
 <meta itemprop=keywords content="k8s,"><meta name=twitter:card content="summary">
 <meta name=twitter:title content="kubeadm部署k8s">
 <meta name=twitter:description content="按照官网检查required https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ 此次使用ubuntu2004 kvm作为主机 检查iptables # 检查是否加载模块br_netfilter lsmod | grep"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
@@ -122,7 +122,7 @@ kubeadm部署k8s - yoogo
 <a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link rel=2>dns<span class=tag-list-count>2</span></a>
 <a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link rel=1>editor<span class=tag-list-count>1</span></a>
 <a href=https://blog.yoogo.top/tags/git/ class=tag-list-link rel=5>git<span class=tag-list-count>5</span></a>
-<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=7>go<span class=tag-list-count>7</span></a>
+<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=8>go<span class=tag-list-count>8</span></a>
 <a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link rel=1>greatwall<span class=tag-list-count>1</span></a>
 <a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link rel=1>hexo<span class=tag-list-count>1</span></a>
 <a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link rel=1>iam<span class=tag-list-count>1</span></a>
@@ -159,7 +159,7 @@ kubeadm部署k8s - yoogo
 <li class=tag-list-item><a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link>dns</a><span class=tag-list-count>2</span></li>
 <li class=tag-list-item><a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link>editor</a><span class=tag-list-count>1</span></li>
 <li class=tag-list-item><a href=https://blog.yoogo.top/tags/git/ class=tag-list-link>git</a><span class=tag-list-count>5</span></li>
-<li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>7</span></li>
+<li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>8</span></li>
 <li class=tag-list-item><a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link>greatwall</a><span class=tag-list-count>1</span></li>
 <li class=tag-list-item><a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li>
 <li class=tag-list-item><a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link>iam</a><span class=tag-list-count>1</span></li>
@@ -262,7 +262,7 @@ kubeadm部署k8s - yoogo
 <i class="icon icon-tags"></i>&nbsp;
 <a class=article-tag-link href=/tags/k8s/> k8s </a>
 </span>
-<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 984字</span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 991字</span>
 <span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 2分 </span>
 </div>
 </div>
@@ -327,11 +327,17 @@ sudo apt-get install containerd
 containerd config default | sudo tee /etc/containerd/config.toml
 </code></pre>
 <p>结合 runc 使用 systemd cgroup 驱动，在 /etc/containerd/config.toml 中设置</p>
+<pre><code class=language-sh>...
+[plugins.&quot;io.containerd.grpc.v1.cri&quot;]
+  ...
+  sandbox_image = &quot;registry.aliyuncs.com/google_containers/pause:3.5&quot;
+  ...
+</code></pre>
 <pre><code class=language-sh>[plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc]
   ...
   [plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc.options]
     SystemdCgroup = true
-    
+
 [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry]
   ...
   [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry.mirrors]
@@ -536,7 +542,7 @@ kubectl get node
 </ul>
 <div class=copyright>
 &copy;2018 -
-2021
+2022
 <div class=publishby>
 Theme by <a href=https://github.com/xiaoheiAh target=_blank> xiaoheiAh </a>base on<a href=https://github.com/xiaoheiAh/hugo-theme-pure target=_blank> pure</a>.
 </div>
