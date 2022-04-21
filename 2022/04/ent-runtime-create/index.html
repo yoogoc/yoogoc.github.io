@@ -1,0 +1,481 @@
+<!doctype html><html lang=zh><head><title>ent分析-runtime-create - yoogo</title><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="ent runtime 通过简单的示例分析ent的运行时，目前只关心字段，暂不关心Edges 创建schema，生成ent代码 package schema import ( &amp;quot;time&amp;quot; &amp;quot;entgo.io/ent&amp;quot; &amp;quot;entgo.io/ent/schema/field&amp;quot; ) // Product holds the schema definition for the Product entity."><meta name=generator content="Hugo 0.97.3 with theme pure"><title>ent分析-runtime-create - yoogo</title><link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css><link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:title" content="ent分析-runtime-create"><meta property="og:description" content="ent runtime 通过简单的示例分析ent的运行时，目前只关心字段，暂不关心Edges 创建schema，生成ent代码 package schema import ( &#34;time&#34; &#34;entgo.io/ent&#34; &#34;entgo.io/ent/schema/field&#34; ) // Product holds the schema definition for the Product entity."><meta property="og:type" content="article"><meta property="og:url" content="https://blog.yoogo.top/2022/04/ent-runtime-create/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-04-21T12:30:00+00:00"><meta property="article:modified_time" content="2022-04-21T12:30:00+00:00"><meta itemprop=name content="ent分析-runtime-create"><meta itemprop=description content="ent runtime 通过简单的示例分析ent的运行时，目前只关心字段，暂不关心Edges 创建schema，生成ent代码 package schema import ( &#34;time&#34; &#34;entgo.io/ent&#34; &#34;entgo.io/ent/schema/field&#34; ) // Product holds the schema definition for the Product entity."><meta itemprop=datePublished content="2022-04-21T12:30:00+00:00"><meta itemprop=dateModified content="2022-04-21T12:30:00+00:00"><meta itemprop=wordCount content="3581"><meta itemprop=keywords content="go,"><meta name=twitter:card content="summary"><meta name=twitter:title content="ent分析-runtime-create"><meta name=twitter:description content="ent runtime 通过简单的示例分析ent的运行时，目前只关心字段，暂不关心Edges 创建schema，生成ent代码 package schema import ( &#34;time&#34; &#34;entgo.io/ent&#34; &#34;entgo.io/ent/schema/field&#34; ) // Product holds the schema definition for the Product entity."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script>
+<script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body class="main-center theme-black" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/yoogoc target=_blank><img class="img-circle img-rotate" src=https://blog.yoogo.top/sites-images/Avatar200.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">yoogo</h2><h3 id=title class="hidden-xs hidden-sm hidden-md">多读书，少放炮</h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>广州</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick=return!1><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i>
+<span class=menu-title>Home</span></a></li><li class="menu-item menu-item-archives"><a href=/posts/><i class="icon icon-archives-fill"></i>
+<span class=menu-title>Archives</span></a></li><li class="menu-item menu-item-categories"><a href=/categories/><i class="icon icon-folder"></i>
+<span class=menu-title>Categories</span></a></li><li class="menu-item menu-item-tags"><a href=/tags/><i class="icon icon-tags"></i>
+<span class=menu-title>Tags</span></a></li><li class="menu-item menu-item-about"><a href=/about/><i class="icon icon-cup-fill"></i>
+<span class=menu-title>About</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>标签</h3><div id=tag-cloud-list class=widget-body><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link rel=1>cloudnative<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/coredns/ class=tag-list-link rel=2>coredns<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link rel=5>devops<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link rel=2>dns<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link rel=1>editor<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/git/ class=tag-list-link rel=5>git<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=9>go<span class=tag-list-count>9</span></a>
+<a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link rel=1>greatwall<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link rel=1>hexo<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link rel=1>iam<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/java/ class=tag-list-link rel=8>java<span class=tag-list-count>8</span></a>
+<a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link rel=13>k8s<span class=tag-list-count>13</span></a>
+<a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link rel=6>linux<span class=tag-list-count>6</span></a>
+<a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link rel=1>mac<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link rel=1>markdown<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/os/ class=tag-list-link rel=2>os<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link rel=5>rails<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>体系结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link rel=1>工作流<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>数据结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link rel=1>正则<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link rel=2>计算思维<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link rel=1>计算机网络<span class=tag-list-count>1</span></a></div><script>document.onreadystatechange=()=>{document.readyState==="complete"&&tagCloud("#tag-cloud-list a",8,20)};function tagCloud(n,s,o){let t=0,e=0;$(n).each(function(){let n=Number($(this).attr("rel"));t<n&&(t=n),(e>n||e==0)&&(e=n)});let i=(o-s)/(t-e);$(n).each(function(){let t=$(this).attr("rel")-e;$(this).css({"font-size":s+t*i+"px"})})}</script></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link>cloudnative</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/coredns/ class=tag-list-link>coredns</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link>devops</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link>dns</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link>editor</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/git/ class=tag-list-link>git</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>9</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link>greatwall</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link>iam</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/java/ class=tag-list-link>java</a><span class=tag-list-count>8</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link>k8s</a><span class=tag-list-count>13</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>6</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link>mac</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link>markdown</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/os/ class=tag-list-link>os</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link>rails</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link>体系结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link>工作流</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link>数据结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link>正则</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link>计算思维</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link>计算机网络</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2022/04/ent-runtime-create/ class=title>ent分析-runtime-create</a></p><p class=item-date><time datetime="2022-04-21 12:30:00 +0000 UTC" itemprop=datePublished>2022-04-21</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/ class=title>ent分析-ent codegen</a></p><p class=item-date><time datetime="2021-10-07 12:30:00 +0000 UTC" itemprop=datePublished>2021-10-07</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/06/ingress-nginx%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/ class=title>ingress-nginx是如何工作的</a></p><p class=item-date><time datetime="2021-06-19 13:06:00 +0000 UTC" itemprop=datePublished>2021-06-19</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/06/coredns-%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0k8s%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/ class=title>coredns-如何实现k8s服务发现</a></p><p class=item-date><time datetime="2021-06-07 18:54:00 +0000 UTC" itemprop=datePublished>2021-06-07</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2021/05/linux-namespace/ class=title>Linux Namespace</a></p><p class=item-date><time datetime="2021-05-09 11:29:00 +0000 UTC" itemprop=datePublished>2021-05-09</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2022/04/ent-runtime-create/>ent分析-runtime-create</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=https://blog.yoogo.top/2022/04/ent-runtime-create/ class=article-date><time datetime="2022-04-21 12:30:00 +0000 UTC" itemprop=datePublished>2022-04-21</time></a></span>
+<span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/go/>go</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 3581字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 8分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><h1 id=ent-runtime>ent runtime</h1><p>通过简单的示例分析ent的运行时，目前只关心字段，暂不关心Edges</p><h2 id=创建schema生成ent代码>创建schema，生成ent代码</h2><pre><code class=language-go>package schema
+
+import (
+	&quot;time&quot;
+
+	&quot;entgo.io/ent&quot;
+	&quot;entgo.io/ent/schema/field&quot;
+)
+
+// Product holds the schema definition for the Product entity.
+type Product struct {
+	ent.Schema
+}
+
+// Fields of the Product.
+func (Product) Fields() []ent.Field {
+	return []ent.Field{
+		field.Int64(&quot;id&quot;),
+		field.String(&quot;name&quot;),
+		field.String(&quot;pic&quot;),
+		field.String(&quot;code&quot;),
+		field.Bool(&quot;is_publish&quot;),
+		field.Int32(&quot;sort&quot;),
+		field.Time(&quot;created_at&quot;).Immutable().Default(time.Now),
+		field.Time(&quot;updated_at&quot;).Default(time.Now).UpdateDefault(time.Now),
+	}
+}
+
+// Edges of the Product.
+func (Product) Edges() []ent.Edge {
+	return nil
+}
+</code></pre><h2 id=初始化driver>初始化driver</h2><p>ent 对database/sql包进行了一次封装，把database/sql#DB结构体抽象到了ExecQuerier接口中</p><pre><code class=language-go>// entgo.io/ent/dialect/driver.go
+type ExecQuerier interface {
+	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
+	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
+}
+
+// Conn implements dialect.ExecQuerier given ExecQuerier.
+type Conn struct {
+	ExecQuerier
+}
+
+// Driver is a dialect.Driver implementation for SQL based databases.
+// 这个结构体实际上是dialect.Driver的实现
+type Driver struct {
+	Conn
+  // 这个字段是为了在buildersql的时候针对不同的数据库采用不同的语法或分隔符，比如pg的quote是&quot;,而mysql的是`
+	dialect string
+}
+
+func Open(driver, source string) (*Driver, error) {
+	db, err := sql.Open(driver, source)
+	if err != nil {
+		return nil, err
+	}
+	return &amp;Driver{Conn{db}, driver}, nil
+}
+</code></pre><h2 id=初始化client>初始化client</h2><ol><li>调用<code>ent/client.go:NewClient</code></li></ol><pre><code class=language-bash>func NewClient(opts ...Option) *Client {
+	// 创建配置对象
+	cfg := config{log: log.Println, hooks: &amp;hooks{}}
+  // 通过Option方式传入自定义参数
+	cfg.options(opts...)
+  // 创建Client结构体
+	client := &amp;Client{config: cfg}
+  // 初始化Client
+	client.init()
+	return client
+}
+</code></pre><p>整体流程还是非常简单的，接下来看下config都保存了什么内容</p><pre><code class=language-bash>type config struct {
+	// 执行db请求的驱动器
+	driver dialect.Driver
+	// 打出debug日志
+	debug bool
+	// debug模式使用的日志方法
+	log func(...interface{})
+	// 每个mutations执行时的hook
+	hooks *hooks
+}
+
+type hooks struct {
+  // product表执行时的hook
+	Product    []ent.Hook
+}
+</code></pre><p>这个config内容不多，主要字段是driver和hook, 继续看下client结构体都保存了什么</p><pre><code class=language-bash>type Client struct {
+  // 配置
+	config
+	// 用于迁移db的schema结构体
+	Schema *migrate.Schema
+	// 与builders交互的client，我们这里只有一个ent schema，所以只有一个，下同
+	Product *ProductClient
+}
+</code></pre><ol><li>client自身的初始化</li></ol><pre><code class=language-bash>func (c *Client) init() {
+  // 根据驱动器生成用于db迁移的Schema结构体
+	c.Schema = migrate.NewSchema(c.driver)
+  // 初始化ProductClient
+	c.Product = NewProductClient(c.config)
+}
+
+// ent/migrate/migrate.go
+// 初始化Schema
+type Schema struct {
+	drv dialect.Driver
+}
+func NewSchema(drv dialect.Driver) *Schema { return &amp;Schema{drv: drv} }
+
+// 初始化ProductClient
+type ProductClient struct {
+	config
+}
+func NewProductClient(c config) *ProductClient {
+	return &amp;ProductClient{config: c}
+}
+</code></pre><p>就这样，client初始化已经完成</p><h2 id=事务的处理>事务的处理</h2><p>ent使用<code>client.Tx(ctx)</code>或<code>client.BeginTx(ctx, opts)</code>开始一个事务，其区别在数BeginTx可以指定事务隔离级别</p><pre><code class=language-go>func (c *Client) Tx(ctx context.Context) (*Tx, error) {
+	if _, ok := c.driver.(*txDriver); ok {
+		return nil, fmt.Errorf(&quot;ent: cannot start a transaction within a transaction&quot;)
+	}
+	tx, err := newTx(ctx, c.driver)
+	if err != nil {
+		return nil, fmt.Errorf(&quot;ent: starting a transaction: %w&quot;, err)
+	}
+	cfg := c.config
+	cfg.driver = tx
+	return &amp;Tx{
+		ctx:     ctx,
+		config:  cfg,
+		Product: NewProductClient(cfg),
+	}, nil
+}
+
+func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) {
+	if _, ok := c.driver.(*txDriver); ok {
+		return nil, fmt.Errorf(&quot;ent: cannot start a transaction within a transaction&quot;)
+	}
+	tx, err := c.driver.(interface {
+		BeginTx(context.Context, *sql.TxOptions) (dialect.Tx, error)
+	}).BeginTx(ctx, opts)
+	if err != nil {
+		return nil, fmt.Errorf(&quot;ent: starting a transaction: %w&quot;, err)
+	}
+	cfg := c.config
+	cfg.driver = &amp;txDriver{tx: tx, drv: c.driver}
+	return &amp;Tx{
+		ctx:     ctx,
+		config:  cfg,
+		Product: NewProductClient(cfg),
+	}, nil
+}
+</code></pre><p>可以看到，两种方式开启一个事务和初始化client流程几乎相同。</p><h2 id=通过productclient创建一个builder>通过<code>ProductClient</code>创建一个builder</h2><pre><code class=language-go>// Create returns a create builder for Product.
+func (c *ProductClient) Create() *ProductCreate {
+	mutation := newProductMutation(c.config, OpCreate)
+	return &amp;ProductCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Product entities.
+func (c *ProductClient) CreateBulk(builders ...*ProductCreate) *ProductCreateBulk {
+	return &amp;ProductCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Product.
+func (c *ProductClient) Update() *ProductUpdate {
+	mutation := newProductMutation(c.config, OpUpdate)
+	return &amp;ProductUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProductClient) UpdateOne(pr *Product) *ProductUpdateOne {
+	mutation := newProductMutation(c.config, OpUpdateOne, withProduct(pr))
+	return &amp;ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProductClient) UpdateOneID(id int64) *ProductUpdateOne {
+	mutation := newProductMutation(c.config, OpUpdateOne, withProductID(id))
+	return &amp;ProductUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Product.
+func (c *ProductClient) Delete() *ProductDelete {
+	mutation := newProductMutation(c.config, OpDelete)
+	return &amp;ProductDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ProductClient) DeleteOne(pr *Product) *ProductDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ProductClient) DeleteOneID(id int64) *ProductDeleteOne {
+	builder := c.Delete().Where(product.ID(id))
+	builder.mutation.id = &amp;id
+	builder.mutation.op = OpDeleteOne
+	return &amp;ProductDeleteOne{builder}
+}
+
+// Query returns a query builder for Product.
+func (c *ProductClient) Query() *ProductQuery {
+	return &amp;ProductQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a Product entity by its id.
+func (c *ProductClient) Get(ctx context.Context, id int64) (*Product, error) {
+	return c.Query().Where(product.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProductClient) GetX(ctx context.Context, id int64) *Product {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+</code></pre><p>product会有几种不同的builder，可以按照以下方式分类：</p><ol><li>是否批量：批量不会创建自己的mutation，但是会将传入的builder切片保存到自己的结构体里。</li><li>是否支持hook：增改删相关可以执行hook，而查询相关方法是不能带hook的。</li><li>基础builder和高级builder：我将（Create，Update，Delete，Query）成为基础builder，其余为高级builder。</li><li>是否会panic：方法后带X的会panic。</li></ol><p>每一个基础builder都会生成一个通过<code>newProductMutation</code>创建的mutation，先看下mutation结构：</p><pre><code class=language-go>// 可以把一个mutation分成几个部分来对待：
+type ProductMutation struct {
+  // 1. 配置，与client相同
+	config
+  // 2. 当前操作类型
+	op            Op
+  // 3. 节点类型（固定字符串Product）
+	typ           string
+	// 4. 指针类型的field
+	id            *int64
+	name          *string
+	pic           *string
+	code          *string
+	is_publish    *bool
+	sort          *int32
+	addsort       *int32
+	created_at    *time.Time
+	updated_at    *time.Time
+
+  // 需要清空的字段
+	clearedFields map[string]struct{}
+
+	// 与oldValue有关
+	done          bool
+	// 旧值
+	oldValue      func(context.Context) (*Product, error)
+	// 谓语，也可以说是where条件
+	predicates    []predicate.Product
+}
+</code></pre><p>现在再看ProductCreate这个builder，还是先看结构体：</p><pre><code class=language-go>type ProductCreate struct {
+	config
+	mutation *ProductMutation
+	hooks    []Hook
+}
+</code></pre><p>结构体依然朴实无华，还是看见常用方法，我们在create一个实体通常有如下操作：</p><pre><code class=language-go>client.Product.Create().SetName(&quot;product1&quot;).Save(ctx)
+</code></pre><p>create builder使用SetXX()或方法来设置值</p><pre><code class=language-go>func (pc *ProductCreate) SetName(s string) *ProductCreate {
+	pc.mutation.SetName(s)
+	return pc
+}
+
+...
+
+func (pc *ProductCreate) SetCreatedAt(t time.Time) *ProductCreate {
+	pc.mutation.SetCreatedAt(t)
+	return pc
+}
+
+func (pc *ProductCreate) SetNillableCreatedAt(t *time.Time) *ProductCreate {
+	if t != nil {
+		pc.SetCreatedAt(*t)
+	}
+	return pc
+}
+</code></pre><p>这里可能会有疑问：为什么有些字段会有Nillable setter，而有一些却没有，这里我们可以通过阅读源码中的模板得到(<a href=https://github.com/ent/ent/blob/cb6e0e063dbc88664a0377e7fde4796b593f9469/entc/gen/template/builder/setter.tmpl#L35>setter.tmpl</a>):</p><pre><code class=language-go>{{ if and (not $f.Type.Nillable) (or $f.Optional $f.Default) (not (and $updater $f.UpdateDefault)) }}
+</code></pre><p><code>Type.Nillable</code>字段的意思<strong>大概可以理解为</strong>该<strong>实体</strong>字段是否是指针类型，那这个判断整体可以理解为：</p><p>如果 <strong>字段不是指针类型</strong>，且（<strong>字段是不是必填</strong> 或 <strong>字段有默认值</strong>）且 <strong>不能是</strong>（<strong>更新操作</strong>中 <strong>该字段有更新默认值</strong>）</p><p>更新操作的<code>ProductUpdate</code> ，<code>ProductUpdateOne</code>，<code>ProductDelete</code>和<code>ProductDeleteOne</code>中Setter方法与ProductCreate中类似，这里就不展开啰嗦了。</p><h2 id=builder构建完成核心的执行方法>builder构建完成，核心的执行方法</h2><p>从ProductCreate Save开始：</p><pre><code class=language-go>func (pc *ProductCreate) Save(ctx context.Context) (*Product, error) {
+	var (
+		err  error
+		node *Product
+	)
+	// 根据Schema中定义Default方法对未赋值的字段进行赋默认值
+	pc.defaults()
+	// 根据有无hook将执行逻辑分为两个部分，但其最终都会调用sqlSave(ctx)方法
+	if len(pc.hooks) == 0 {
+    // 对字段进行检查，每个字段可能会有两种检查，第一是对不是optional的字段检查是否已经赋值
+    // 第二种是对这个字段自定义的Validators进行检查
+		if err = pc.check(); err != nil {
+			return nil, err
+		}
+    // 真正有价值的东西，后面单独分析
+		node, err = pc.sqlSave(ctx)
+	} else {
+    // 构造 Mutator ，使hook能通过slice形式进行递归调用，比如：Use(f, g, h)` 等于 `product.Hooks(f(g(h())))
+		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
+			mutation, ok := m.(*ProductMutation)
+			if !ok {
+				return nil, fmt.Errorf(&quot;unexpected mutation type %T&quot;, m)
+			}
+			if err = pc.check(); err != nil {
+				return nil, err
+			}
+			pc.mutation = mutation
+			if node, err = pc.sqlSave(ctx); err != nil {
+				return nil, err
+			}
+			mutation.id = &amp;node.ID
+			mutation.done = true
+			return node, err
+		})
+		for i := len(pc.hooks) - 1; i &gt;= 0; i-- {
+			if pc.hooks[i] == nil {
+				return nil, fmt.Errorf(&quot;ent: uninitialized hook (forgotten import ent/runtime?)&quot;)
+			}
+			mut = pc.hooks[i](mut)
+		}
+		if _, err := mut.Mutate(ctx, pc.mutation); err != nil {
+			return nil, err
+		}
+	}
+	return node, err
+}
+</code></pre><p>执行sqlSave：</p><pre><code class=language-go>func (pc *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
+	// 构造Product对象和sqlgraph.CreateSpec
+	_node, _spec := pc.createSpec()
+  // 构造sql并执行
+	if err := sqlgraph.CreateNode(ctx, pc.driver, _spec); err != nil {
+		if sqlgraph.IsConstraintError(err) {
+			err = &amp;ConstraintError{err.Error(), err}
+		}
+		return nil, err
+	}
+  // 更新id
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int64(id)
+	}
+	return _node, nil
+}
+</code></pre><p>构造Spec（流程依旧朴实无华，代码即注释，不啰嗦了）:</p><pre><code class=language-go>func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
+	var (
+		_node = &amp;Product{config: pc.config}
+		_spec = &amp;sqlgraph.CreateSpec{
+			Table: product.Table,
+			ID: &amp;sqlgraph.FieldSpec{
+				Type:   field.TypeInt64,
+				Column: product.FieldID,
+			},
+		}
+	)
+	if id, ok := pc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
+	if value, ok := pc.mutation.Name(); ok {
+		_spec.Fields = append(_spec.Fields, &amp;sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: product.FieldName,
+		})
+		_node.Name = value
+ 	}
+
+  ...
+
+	return _node, _spec
+}
+</code></pre><h2 id=万事俱备只欠东风>万事俱备只欠东风</h2><p>终于从codegen生产的代码跳到了ent包内</p><pre><code class=language-go>func CreateNode(ctx context.Context, drv dialect.Driver, spec *CreateSpec) error {
+  // 所有的builder都会用这个通用的graph来构造和执行sql
+	gr := graph{tx: drv, builder: sql.Dialect(drv.Dialect())}
+  // creator 是为了create操作抽象成的结构体
+	cr := &amp;creator{CreateSpec: spec, graph: gr}
+  // 构造和执行
+	return cr.node(ctx, drv)
+}
+</code></pre><p>构造和执行,忽略了edges</p><pre><code class=language-go>func (c *creator) node(ctx context.Context, drv dialect.Driver) error {
+	var (
+		...
+    // 构造真正的InsertBuilder
+		insert = c.builder.Insert(c.Table).Schema(c.Schema).Default()
+	)
+  // 填充字段值
+	if err := c.setTableColumns(insert, edges); err != nil {
+		return err
+	}
+  // 根据edges判断是否为多行sql，如果是则开启事务。
+  // 无论怎样都会把creator的tx替换，如果开启事务：则结构体为https://github.com/ent/ent/blob/cb6e0e063dbc88664a0377e7fde4796b593f9469/dialect/sql/driver.go#Tx
+  // 如果不开启：则结构体为https://github.com/ent/ent/blob/cb6e0e063dbc88664a0377e7fde4796b593f9469/dialect/dialect.go#NopTx
+	tx, err := c.mayTx(ctx, drv, edges)
+	if err != nil {
+		return err
+	}
+	if err := func() error {
+    // 拼接和执行sql
+		if err := c.insert(ctx, insert); err != nil {
+			return err
+		}
+		...
+	}(); err != nil {
+		return rollback(tx, err)
+	}
+	return tx.Commit()
+}
+</code></pre><p>拼接和执行sql：</p><pre><code class=language-go>func (c *creator) insert(ctx context.Context, insert *sql.InsertBuilder) error {
+	if opts := c.CreateSpec.OnConflict; len(opts) &gt; 0 {
+		insert.OnConflict(opts...)
+		c.ensureLastInsertID(insert)
+	}
+	// 如果外部提供id值
+	if c.ID.Value != nil {
+		insert.Set(c.ID.Column, c.ID.Value)
+		// In case of &quot;ON CONFLICT&quot;, the record may exists in the
+		// database, and we need to get back the database id field.
+		if len(c.CreateSpec.OnConflict) == 0 {
+      // 拼接sql，构造参数数组，这个query方法只是不停地拼字符串，就不展开啰嗦了
+			query, args := insert.Query()
+      // 执行sql，这个是各种驱动器实现的，就不深入分析了
+			return c.tx.Exec(ctx, query, args, nil)
+		}
+	}
+	return c.insertLastID(ctx, insert.Returning(c.ID.Column))
+}
+</code></pre><p>不提供id值的情况，需要从数据库取回id并赋值回CreateSpec</p></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接:</strong>
+<a href=https://blog.yoogo.top/2022/04/ent-runtime-create/ title=ent分析-runtime-create target=_blank rel=external>https://blog.yoogo.top/2022/04/ent-runtime-create/</a></li><li class=post-copyright-license><strong>License:</strong>
+<a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>CC BY 4.0 CN</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/yoogoc target=_blank class="img-burn thumb-sm visible-lg"><img src=https://blog.yoogo.top/sites-images/Avatar200.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/yoogoc target=_blank><span class=text-dark>yoogo</span><small class=ml-1x>多读书，少放炮</small></a></h3><div>我书读的不多，想的却不少</div></div></figure></div></div></div></article></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=https://blog.yoogo.top/2021/10/ent%E5%88%86%E6%9E%90/ title="ent分析-ent codegen"><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i>
+<i class="text-in icon icon-close"></i>
+<span>]</span></a></li></ul><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/yoogoc target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=https://blog.yoogo.top/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li></ul><div class=copyright>&copy;2018 -
+2022<div class=publishby>Theme by <a href=https://github.com/xiaoheiAh target=_blank>xiaoheiAh </a>base on<a href=https://github.com/xiaoheiAh/hugo-theme-pure target=_blank> pure</a>.</div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script>
+<script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script>
+<script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js defer></script>
+<script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js defer></script><script>hljs.configure({tabReplace:"    ",classPrefix:''}),hljs.initHighlightingOnLoad()</script>
+<script src=https://blog.yoogo.top/js/application.min.c181e6b0c036798c7731cfb85b41b44c80689fd48fee546b73d449386ce6ccfb.js></script>
+<script src=https://blog.yoogo.top/js/plugin.min.5c7ae0f9d1f515776ebc5e20dd06a3552ddc2a373d481d1c03bd7dfa574bec41.js></script>
+<script>(function(e){var t={TRANSLATION:{POSTS:"文章",PAGES:"页面",CATEGORIES:"分类",TAGS:"标签",UNTITLED:"(未命名)"},ROOT_URL:"https://blog.yoogo.top/",CONTENT_URL:"https://blog.yoogo.top//searchindex.json "};e.INSIGHT_CONFIG=t})(window)</script><script type=text/javascript src=https://blog.yoogo.top/js/insight.min.853c5d4062a8c262b2490c70df2f6d2b232483f85227b30b28013788b8c4da8ab59c1a735b9b31c9006f2962ef62213fea9d17cb9469c297f201772ce94e8fdf.js defer></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script>
+<script>tocbot.init({tocSelector:".js-toc",contentSelector:".js-toc-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0})</script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js></script>
+<script type=text/javascript src=/js/opt-mermaid.js></script>
+<script id=LA_COLLECT src=//sdk.51.la/js-sdk-pro.min.js></script>
+<script>LA.init({id:"JVnj1Z6jp0t62WHS",ck:"JVnj1Z6jp0t62WHS"})</script></body></html>
