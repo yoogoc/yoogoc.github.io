@@ -1,14 +1,21 @@
+{{- $comment := .Site.Params.comment}}
+{{- with $comment }}
+<section id="comments">
+{{ if $comment.giscus }}
 <div class="giscus">
 <script src="https://giscus.app/client.js"
-        data-repo="{{site.Params.comments.giscus.repo}}"
-        data-repo-id="{{site.Params.comments.giscus.repo_id}}"
-        data-category="{{site.Params.comments.giscus.category}}"
-        data-category-id="{{site.Params.comments.giscus.category_id}}"
-        data-mapping="{{site.Params.comments.giscus.mapping}}"
-        data-reactions-enabled="{{site.Params.comments.giscus.reactions_enabled}}"
-        data-theme="{{site.Params.comments.giscus.theme}}"
-        data-lang="{{site.Params.comments.giscus.lang}}"
+        data-repo="{{$comment.giscus.repo}}"
+        data-repo-id="{{$comment.giscus.repo_id}}"
+        data-category="{{$comment.giscus.category}}"
+        data-category-id="{{$comment.giscus.category_id}}"
+        data-mapping="{{$comment.giscus.mapping}}"
+        data-reactions-enabled="{{$comment.giscus.reactions_enabled}}"
+        data-theme="{{$comment.giscus.theme}}"
+        data-lang="{{$comment.giscus.lang}}"
         crossorigin="anonymous"
         async>
 </script>
 <noscript>Please enable JavaScript to view the comments powered by giscus.</noscript>
+{{ end }}
+</section>
+{{ end }}
