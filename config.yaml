@@ -136,7 +136,7 @@ params:
 
   # Comment
   comment:
-    type:  # type disqus/gitalk/valine 启用哪种评论系统
+    type:  giscus # type disqus/gitalk/valine 启用哪种评论系统
     disqus: your_disqus_name # enter disqus shortname here
     gitalk: # gitalk. https://gitalk.github.io/
       owner: #必须. GitHub repository 所有者，可以是个人或者组织。
@@ -154,6 +154,15 @@ params:
       meta: nick,mail # custom comment header
       pageSize: 10 # pagination size
       visitor: false # Article reading statistic https://valine.js.org/visitor.html
+    giscus:
+      repo: YoogoC/yoogoc.github.io
+      repo_id: MDEwOlJlcG9zaXRvcnkzNjExOTQ5ODk=
+      category: Announcements
+      category_id: DIC_kwDOFYdl7c4COzVn
+      mapping: "og:title"
+      reactions_enabled: "1"
+      theme: light
+      lang: zh-CN
 
   # Donate
   donate:
