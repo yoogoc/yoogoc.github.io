@@ -350,3 +350,12 @@ spec:
 EOF
 ```
 
+
+
+## local-path-provisioner
+
+```sh
+gh repo clone rancher/local-path-provisioner && cd local-path-provisioner/deploy/chart/local-path-provisioner/
+helm install local-path-provisioner . --namespace local-path-storage --create-namespace --set storageClass.defaultClass=true
+```
+
