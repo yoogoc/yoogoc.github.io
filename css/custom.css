@@ -6,4 +6,8 @@ g.label {
   font-size: initial;
   font-weight: initial;
   line-height: initial;
+}
+
+blockquote {
+  overflow-x: scroll;
 };
