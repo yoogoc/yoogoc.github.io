@@ -16,15 +16,25 @@ date: 2022-10-18 14:00:00
 
 .git/
 ├── COMMIT_EDITMSG — 最近一次commit的msg
+
 ├── HEAD — 当前头指针
+
 ├── ORIG_HEAD — 远端头指针
+
 ├── config — 项目git配置
+
 ├── description — GitWeb使用
+
 ├── hooks — client或server钩子脚本
+
 ├── index — 暂存区索引
+
 ├── info — 保存项目全局需要排除的ignored patterns（很神奇的用法是：如果需要不在.gitignore文件中追踪，但需要忽略的文件，可以通过修改这个文件来实现）
+
 ├── logs — 非初始化目录，记录一切修改HEAD的操作
+
 ├── objects — 相当于git的数据库，使用sha-1校验和作为文件名，文件内容使用zip压缩
+
 └── refs — 维护分支和tag的引用关系
 
 ## git中的对象(object: blob, tree, commit) 及sha-1校验和的由来
@@ -169,12 +179,14 @@ third commit提交bak/test.txt，此次提交并未新增blob对象，因为new.
 事实上，所有的git操作都是围绕着这三个对象，所以理解git object是很重要的。
 
 > 参考资料
-[https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain](https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain)
-[https://thoughtbot.com/blog/rebuilding-git-in-ruby](https://thoughtbot.com/blog/rebuilding-git-in-ruby)
-[http://gitlet.maryrosecook.com/docs/gitlet.html](http://gitlet.maryrosecook.com/docs/gitlet.html)
-[https://benhoyt.com/writings/pygit/](https://benhoyt.com/writings/pygit/)
-[https://github.com/go-git/go-git](https://github.com/go-git/go-git)
-> 
+> [https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain](https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain)
+>
+> [https://thoughtbot.com/blog/rebuilding-git-in-ruby](https://thoughtbot.com/blog/rebuilding-git-in-ruby)
+>
+> [http://gitlet.maryrosecook.com/docs/gitlet.html](http://gitlet.maryrosecook.com/docs/gitlet.html)
+> [https://benhoyt.com/writings/pygit/](https://benhoyt.com/writings/pygit/)
+>
+> [https://github.com/go-git/go-git](https://github.com/go-git/go-git)
 
 ## 一些抖机灵的操作
 
