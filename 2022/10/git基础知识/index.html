@@ -39,8 +39,19 @@
 <a class=article-tag-link href=/tags/git/>git</a></span>
 <span class=post-comment><i class="icon icon-comment"></i>&nbsp;<a href=/2022/10/git%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/#comments class=article-comment-link>评论</a></span>
 <span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 2598字</span>
-<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 6分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><h1 id=git基础知识>git基础知识</h1><h2 id=git目录探索>.git目录探索</h2><p><code>tree -L 1 .git/</code></p><p>.git/
-├── COMMIT_EDITMSG — 最近一次commit的msg</p><p>├── HEAD — 当前头指针</p><p>├── ORIG_HEAD — 远端头指针</p><p>├── config — 项目git配置</p><p>├── description — GitWeb使用</p><p>├── hooks — client或server钩子脚本</p><p>├── index — 暂存区索引</p><p>├── info — 保存项目全局需要排除的ignored patterns（很神奇的用法是：如果需要不在.gitignore文件中追踪，但需要忽略的文件，可以通过修改这个文件来实现）</p><p>├── logs — 非初始化目录，记录一切修改HEAD的操作</p><p>├── objects — 相当于git的数据库，使用sha-1校验和作为文件名，文件内容使用zip压缩</p><p>└── refs — 维护分支和tag的引用关系</p><h2 id=git中的对象object-blob-tree-commit-及sha-1校验和的由来>git中的对象(object: blob, tree, commit) 及sha-1校验和的由来</h2><h3 id=blob>blob</h3><p>项目目录下除了被忽略的文件和.git目录下的文件，其余的文件就是一个blob对象。</p><pre><code class=language-bash>➜  test-git git:(main) echo 'hello git' &gt; hello
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 6分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><h1 id=git基础知识>git基础知识</h1><h2 id=git目录探索>.git目录探索</h2><p><code>tree -L 1 .git/</code></p><pre><code>.git/
+├── COMMIT_EDITMSG — 最近一次commit的msg
+├── HEAD — 当前头指针
+├── ORIG_HEAD — 远端头指针
+├── config — 项目git配置
+├── description — GitWeb使用
+├── hooks — client或server钩子脚本
+├── index — 暂存区索引
+├── info — 保存项目全局需要排除的ignored patterns（很神奇的用法是：如果需要不在.gitignore文件中追踪，但需要忽略的文件，可以通过修改这个文件来实现）
+├── logs — 非初始化目录，记录一切修改HEAD的操作
+├── objects — 相当于git的数据库，使用sha-1校验和作为文件名，文件内容使用zip压缩
+└── refs — 维护分支和tag的引用关系
+</code></pre><h2 id=git中的对象object-blob-tree-commit-及sha-1校验和的由来>git中的对象(object: blob, tree, commit) 及sha-1校验和的由来</h2><h3 id=blob>blob</h3><p>项目目录下除了被忽略的文件和.git目录下的文件，其余的文件就是一个blob对象。</p><pre><code class=language-bash>➜  test-git git:(main) echo 'hello git' &gt; hello
 ➜  test-git git:(main) ✗ git add hello
 ➜  test-git git:(main) ✗ find .git/objects -type f
 .git/objects/8d/0e41234f24b6da002d962a26c2495ea16a425f
@@ -85,9 +96,7 @@ author yoogo &lt;yoogoc@163.com&gt; 1666081939 +0800
 committer yoogo &lt;yoogoc@163.com&gt; 1666081939 +0800
 
 first commit
-</code></pre><p>抽象出文件内容的格式：</p><p>tree</p><p>author &#171;email&#187;</p><p>committer &#171;email&#187;</p><p>其sha-1的计算也是对未压缩前的文件内容进行hash，因为有时间戳的关系，同样的changes，在不同的时间计算出的sha-1是不同的。</p><p>我们看到<code>tree 313d4544c5e56d50d88efc84043df5b7fe6fef69</code>这就是树的根节点，官网图例：</p><p><img src=/images/git-commit.png alt=Untitled></p><p>在这个图中，可以看到：</p><p>first commit提交了test.txt文件</p><p>second commit 提交了new.txt,并且修改了test.txt</p><p>third commit提交bak/test.txt，此次提交并未新增blob对象，因为new.txt，test.txt并未修改，所以得到的sha-1是相同的，提交的bak/test.txt内容与first commit的test.txt文件是相同的，所以计算出的sha-1也是相同的，所以都无需创建blob对象，只需构建tree即可。</p><p>事实上，所有的git操作都是围绕着这三个对象，所以理解git object是很重要的。</p><blockquote><p>参考资料
-<a href=https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain>https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain</a></p><p><a href=https://thoughtbot.com/blog/rebuilding-git-in-ruby>https://thoughtbot.com/blog/rebuilding-git-in-ruby</a></p><p><a href=http://gitlet.maryrosecook.com/docs/gitlet.html>http://gitlet.maryrosecook.com/docs/gitlet.html</a>
-<a href=https://benhoyt.com/writings/pygit/>https://benhoyt.com/writings/pygit/</a></p><p><a href=https://github.com/go-git/go-git>https://github.com/go-git/go-git</a></p></blockquote><h2 id=一些抖机灵的操作>一些抖机灵的操作</h2><ol><li><p><code>git commit —-amend</code>
+</code></pre><p>抽象出文件内容的格式：</p><p>tree</p><p>author &#171;email&#187;</p><p>committer &#171;email&#187;</p><p>其sha-1的计算也是对未压缩前的文件内容进行hash，因为有时间戳的关系，同样的changes，在不同的时间计算出的sha-1是不同的。</p><p>我们看到<code>tree 313d4544c5e56d50d88efc84043df5b7fe6fef69</code>这就是树的根节点，官网图例：</p><p><img src=/images/git-commit.png alt=Untitled></p><p>在这个图中，可以看到：</p><p>first commit提交了test.txt文件</p><p>second commit 提交了new.txt,并且修改了test.txt</p><p>third commit提交bak/test.txt，此次提交并未新增blob对象，因为new.txt，test.txt并未修改，所以得到的sha-1是相同的，提交的bak/test.txt内容与first commit的test.txt文件是相同的，所以计算出的sha-1也是相同的，所以都无需创建blob对象，只需构建tree即可。</p><p>事实上，所有的git操作都是围绕着这三个对象，所以理解git object是很重要的。</p><blockquote><p>参考资料</p><p><a href=https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain>https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain</a></p><p><a href=https://thoughtbot.com/blog/rebuilding-git-in-ruby>https://thoughtbot.com/blog/rebuilding-git-in-ruby</a></p><p><a href=http://gitlet.maryrosecook.com/docs/gitlet.html>http://gitlet.maryrosecook.com/docs/gitlet.html</a></p><p><a href=https://benhoyt.com/writings/pygit/>https://benhoyt.com/writings/pygit/</a></p><p><a href=https://github.com/go-git/go-git>https://github.com/go-git/go-git</a></p></blockquote><h2 id=一些抖机灵的操作>一些抖机灵的操作</h2><ol><li><p><code>git commit —-amend</code>
 背景：接到需求，编码，git提交，发现一个小问题
 这时提交到git可能的方案：对这个小问题新建一个commit。
 但这种貌似不是很优雅，这样会使整个git log非常难看，过了n天，自己也记不得当时为什么在极短的时间差提交了两个commit，一个feat: xxxx，一个fix: xxxxx。
