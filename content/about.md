@@ -1,6 +1,6 @@
 +++
 title = "About"
-description = "Hugo, the world’s fastest framework for building websites"
+description = "ahahaha"
 date = "2023-12-01"
 aliases = ["about-us","about-hugo","contact"]
 author = "Hugo Authors"
@@ -14,7 +14,7 @@ author = "Hugo Authors"
 
 微信号：yoogoc
 
-我的.gitconfig
+我的`.gitconfig`
 
 ```
 [user]
@@ -67,4 +67,45 @@ author = "Hugo Authors"
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+```
+
+我的`wezterm.lua`
+
+```lua
+local wezterm = require 'wezterm'
+local mux = wezterm.mux
+local act = wezterm.action
+
+-- max window
+wezterm.on("gui-startup", function()
+  local tab, pane, window = mux.spawn_window{}
+  window:gui_window():maximize()
+end)
+
+local config = {}
+
+if wezterm.config_builder then
+  wezterm.log_info(wezterm)
+  config = wezterm.config_builder()
+end
+
+-- view
+config.window_decorations = "RESIZE"
+config.font = wezterm.font('Hack Nerd Font Mono', { weight = 'Regular' })
+config.font_size = 14.0
+
+-- keys binding
+config.keys = {
+  { key = 'D', mods = 'SHIFT|SUPER', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
+  { key = 'd', mods = 'SUPER', action = act.SplitVertical{ domain =  'CurrentPaneDomain' } },
+  { key = 'w', mods = 'SUPER', action = act.CloseCurrentPane{ confirm = true } },
+  { key = 'LeftArrow', mods = 'ALT', action = act.SendString '\x1bb' },
+  { key = 'RightArrow', mods = 'ALT', action = act.SendString '\x1bf' },
+  { key = 'LeftArrow', mods = 'SUPER', action = act.ActivatePaneDirection 'Left' },
+  { key = 'RightArrow', mods = 'SUPER', action = act.ActivatePaneDirection 'Right' },
+  { key = 'UpArrow', mods = 'SUPER', action = act.ActivatePaneDirection 'Up' },
+  { key = 'DownArrow', mods = 'SUPER', action = act.ActivatePaneDirection 'Down' },
+}
+
+return config
 ```
