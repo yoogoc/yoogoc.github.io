@@ -1,0 +1,173 @@
+<!doctype html><html lang=zh><head><title>fga-rs实现笔记 - yoogo
+</title><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui"><meta name=renderer content="webkit"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=format-detection content="telephone=no,email=no,adress=no"><meta name=theme-color content="#000000"><meta http-equiv=window-target content="_top"><meta name=description content="谷歌论文zanzibar的 rust 实现 zanzibar 是谷歌全球授权系统的实现，但谷歌并没有开源，只是发布了一篇论文来秀，近些年，也有很多优秀的实现，比如： https://github.com/openfga/openfga a"><meta name=generator content="Hugo 0.125.3 with theme pure"><title>fga-rs实现笔记 - yoogo</title>
+<link rel=stylesheet href=https://blog.yoogo.top/css/style.min.e64d754037c0ee0ec4e20ab1d6f07740ace61729bc03850559b8caa21ae4a597.css><link rel=stylesheet href=https://blog.yoogo.top/css/custom.css async><link rel=stylesheet href=https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css async><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css async><meta property="og:url" content="https://blog.yoogo.top/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/"><meta property="og:site_name" content="yoogo"><meta property="og:title" content="fga-rs实现笔记"><meta property="og:description" content="谷歌论文zanzibar的 rust 实现 zanzibar 是谷歌全球授权系统的实现，但谷歌并没有开源，只是发布了一篇论文来秀，近些年，也有很多优秀的实现，比如： https://github.com/openfga/openfga a"><meta property="og:locale" content="zh"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-04-25T00:00:00+00:00"><meta property="article:modified_time" content="2024-04-25T00:00:00+00:00"><meta property="article:tag" content="Rust"><meta itemprop=name content="fga-rs实现笔记"><meta itemprop=description content="谷歌论文zanzibar的 rust 实现 zanzibar 是谷歌全球授权系统的实现，但谷歌并没有开源，只是发布了一篇论文来秀，近些年，也有很多优秀的实现，比如： https://github.com/openfga/openfga a"><meta itemprop=datePublished content="2024-04-25T00:00:00+00:00"><meta itemprop=dateModified content="2024-04-25T00:00:00+00:00"><meta itemprop=wordCount content="2241"><meta itemprop=keywords content="Rust"><meta name=twitter:card content="summary"><meta name=twitter:title content="fga-rs实现笔记"><meta name=twitter:description content="谷歌论文zanzibar的 rust 实现 zanzibar 是谷歌全球授权系统的实现，但谷歌并没有开源，只是发布了一篇论文来秀，近些年，也有很多优秀的实现，比如： https://github.com/openfga/openfga a"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2750701082950059" crossorigin=anonymous></script></head><body class="main-center theme-black" itemscope itemtype=http://schema.org/WebPage><header class=header itemscope itemtype=http://schema.org/WPHeader><div class=slimContent><div class=navbar-header><div class="profile-block text-center"><a id=avatar href=https://github.com/yoogoc target=_blank><img class="img-circle img-rotate" src=https://blog.yoogo.top/sites-images/Avatar200.png width=200 height=200></a><h2 id=name class="hidden-xs hidden-sm">yoogo</h2><h3 id=title class="hidden-xs hidden-sm hidden-md"></h3><small id=location class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>广州</small></div><div class=search id=search-form-wrap><form class="search-form sidebar-form"><div class=input-group><input type=text class="search-form-input form-control" placeholder=搜索>
+<span class=input-group-btn><button type=submit class="search-form-submit btn btn-flat" onclick=return!1><i class="icon icon-search"></i></button></span></div><div class=ins-search><div class=ins-search-mask></div><div class=ins-search-container><div class=ins-input-wrapper><input type=text class=ins-search-input placeholder=想要查找什么... x-webkit-speech>
+<button type=button class="close ins-close ins-selectable" data-dismiss=modal aria-label=Close><span aria-hidden=true>×</span></button></div><div class=ins-section-wrapper><div class=ins-section-container></div></div></div></div></form></div><button class="navbar-toggle collapsed" type=button data-toggle=collapse data-target=#main-navbar aria-controls=main-navbar aria-expanded=false>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span></button></div><nav id=main-navbar class="collapse navbar-collapse" itemscope itemtype=http://schema.org/SiteNavigationElement role=navigation><ul class="nav navbar-nav main-nav"><li class="menu-item menu-item-home"><a href=/><i class="icon icon-home-fill"></i>
+<span class=menu-title>Home</span></a></li><li class="menu-item menu-item-archives"><a href=/posts/><i class="icon icon-archives-fill"></i>
+<span class=menu-title>Archives</span></a></li><li class="menu-item menu-item-categories"><a href=/categories/><i class="icon icon-folder"></i>
+<span class=menu-title>Categories</span></a></li><li class="menu-item menu-item-tags"><a href=/tags/><i class="icon icon-tags"></i>
+<span class=menu-title>Tags</span></a></li><li class="menu-item menu-item-about"><a href=/about/><i class="icon icon-cup-fill"></i>
+<span class=menu-title>About</span></a></li></ul></nav></div></header><aside class=sidebar itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><div class=widget><h3 class=widget-title>标签</h3><div id=tag-cloud-list class=widget-body><a href=https://blog.yoogo.top/tags/ai/ class=tag-list-link rel=1>ai<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link rel=1>cloudnative<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/coredns/ class=tag-list-link rel=2>coredns<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/db/ class=tag-list-link rel=1>db<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link rel=5>devops<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link rel=2>dns<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link rel=1>editor<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/git/ class=tag-list-link rel=6>git<span class=tag-list-count>6</span></a>
+<a href=https://blog.yoogo.top/tags/go/ class=tag-list-link rel=11>go<span class=tag-list-count>11</span></a>
+<a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link rel=1>greatwall<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link rel=1>hexo<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link rel=2>iam<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/java/ class=tag-list-link rel=8>java<span class=tag-list-count>8</span></a>
+<a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link rel=15>k8s<span class=tag-list-count>15</span></a>
+<a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link rel=6>linux<span class=tag-list-count>6</span></a>
+<a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link rel=1>mac<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link rel=1>markdown<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/network/ class=tag-list-link rel=1>network<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/os/ class=tag-list-link rel=2>os<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link rel=5>rails<span class=tag-list-count>5</span></a>
+<a href=https://blog.yoogo.top/tags/rust/ class=tag-list-link rel=2>rust<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>体系结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link rel=1>工作流<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link rel=1>数据结构<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link rel=1>正则<span class=tag-list-count>1</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link rel=2>计算思维<span class=tag-list-count>2</span></a>
+<a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link rel=1>计算机网络<span class=tag-list-count>1</span></a></div><script>document.onreadystatechange=()=>{document.readyState==="complete"&&tagCloud("#tag-cloud-list a",8,20)};function tagCloud(e,t,n){let o=0,s=0;$(e).each(function(){let e=Number($(this).attr("rel"));o<e&&(o=e),(s>e||s==0)&&(s=e)});let i=(n-t)/(o-s);$(e).each(function(){let e=$(this).attr("rel")-s;$(this).css({"font-size":t+e*i+"px"})})}</script></div><div class=widget><h3 class=widget-title>分类</h3><div class=widget-body><ul class=category-list></ul></div></div><div class=widget><h3 class=widget-title>标签</h3><div class=widget-body><ul class=tag-list><li class=tag-list-item><a href=https://blog.yoogo.top/tags/ai/ class=tag-list-link>ai</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/cloudnative/ class=tag-list-link>cloudnative</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/coredns/ class=tag-list-link>coredns</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/db/ class=tag-list-link>db</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/devops/ class=tag-list-link>devops</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/dns/ class=tag-list-link>dns</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/editor/ class=tag-list-link>editor</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/git/ class=tag-list-link>git</a><span class=tag-list-count>6</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/go/ class=tag-list-link>go</a><span class=tag-list-count>11</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/greatwall/ class=tag-list-link>greatwall</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/hexo/ class=tag-list-link>hexo</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/iam/ class=tag-list-link>iam</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/java/ class=tag-list-link>java</a><span class=tag-list-count>8</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/k8s/ class=tag-list-link>k8s</a><span class=tag-list-count>15</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/linux/ class=tag-list-link>linux</a><span class=tag-list-count>6</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/mac/ class=tag-list-link>mac</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/markdown/ class=tag-list-link>markdown</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/network/ class=tag-list-link>network</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/os/ class=tag-list-link>os</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/rails/ class=tag-list-link>rails</a><span class=tag-list-count>5</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/rust/ class=tag-list-link>rust</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/ class=tag-list-link>体系结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/ class=tag-list-link>工作流</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=tag-list-link>数据结构</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E6%AD%A3%E5%88%99/ class=tag-list-link>正则</a><span class=tag-list-count>1</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%80%9D%E7%BB%B4/ class=tag-list-link>计算思维</a><span class=tag-list-count>2</span></li><li class=tag-list-item><a href=https://blog.yoogo.top/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/ class=tag-list-link>计算机网络</a><span class=tag-list-count>1</span></li></ul></div></div><div class=widget><h3 class=widget-title>最新文章</h3><div class=widget-body><ul class="recent-post-list list-unstyled no-thumbnail"><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/ class=title>fga-rs实现笔记</a></p><p class=item-date><time datetime="2024-04-25 00:00:00 +0000 UTC" itemprop=datePublished>2024-04-25</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2023/12/rebac%E4%BB%8B%E7%BB%8D%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/ class=title>rebac/zanzibar介绍、实现及应用</a></p><p class=item-date><time datetime="2023-12-01 13:00:00 +0000 UTC" itemprop=datePublished>2023-12-01</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2023/06/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93-qdrant/ class=title>向量数据库-qdrant-基本使用</a></p><p class=item-date><time datetime="2023-06-05 17:13:00 +0000 UTC" itemprop=datePublished>2023-06-05</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2022/10/git%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/ class=title>git基础知识</a></p><p class=item-date><time datetime="2022-10-18 14:00:00 +0000 UTC" itemprop=datePublished>2022-10-18</time></p></div></li><li><div class=item-inner><p class=item-title><a href=https://blog.yoogo.top/2022/07/k8s%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E4%B9%8Bpod%E9%97%B4%E9%80%9A%E8%AE%AF/ class=title>k8s网络模型之pod间通讯</a></p><p class=item-date><time datetime="2022-07-31 12:00:00 +0000 UTC" itemprop=datePublished>2022-07-31</time></p></div></li></ul></div></div></div></aside><aside class="sidebar sidebar-toc collapse" id=collapseToc itemscope itemtype=http://schema.org/WPSideBar><div class=slimContent><h4 class=toc-title>文章目录</h4><nav id=toc class="js-toc toc"></nav></div></aside><main class=main role=main><div class=content><article id=- class="article article-type-" itemscope itemtype=http://schema.org/BlogPosting><div class=article-header><h1 itemprop=name><a class=article-title href=/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/>fga-rs实现笔记</a></h1><div class=article-meta><span class=article-date><i class="icon icon-calendar-check"></i>&nbsp;
+<a href=https://blog.yoogo.top/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/ class=article-date><time datetime="2024-04-25 00:00:00 +0000 UTC" itemprop=datePublished>2024-04-25</time>
+</a></span><span class=article-tag><i class="icon icon-tags"></i>&nbsp;
+<a class=article-tag-link href=/tags/rust/>rust </a></span><span class=post-comment><i class="icon icon-comment"></i>&nbsp;<a href=/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/#comments class=article-comment-link>评论</a></span>
+<span class="post-wordcount hidden-xs" itemprop=wordCount>字数统计: 2241字</span>
+<span class="post-readcount hidden-xs" itemprop=timeRequired>阅读时长: 5分</span></div></div><div class="article-entry marked-body js-toc-content" itemprop=articleBody><p>谷歌论文zanzibar的 rust 实现</p><p>zanzibar 是谷歌全球授权系统的实现，但谷歌并没有开源，只是发布了一篇论文来秀，近些年，也有很多优秀的实现，比如：</p><ol><li><a href=https://github.com/openfga/openfga>https://github.com/openfga/openfga</a> auth0开源的，现在已经捐给 cncf，现为沙盒项目</li><li><a href=https://github.com/Permify/permify>https://github.com/Permify/permify</a> 貌似是国外创业小厂实现，我自己感觉比 openfga 要好一点，因为他可以展开 users，而 openfga 不行</li><li><a href=https://github.com/authzed/spicedb>https://github.com/authzed/spicedb</a> 没仔细看他的实现，就不发表评价了</li></ol><p>他们三个的共同点是都基本实现了 zanzibar，都没有 index system，表达式引擎都是用的 <a href=https://github.com/google/cel-go>https://github.com/google/cel-go</a></p><p>写这个 rust 版本的目的并不是为了能与大佬们分一杯羹，相反，通过自己写 rust 版本，从而会看他们大量的文档、设计和代码实现，最后能更好的使用他们。</p><h2 id=库选型>库选型</h2><ol><li>解析器： 思来想去还是自己写了，openfga 的语法并不是我想要的，所以就用lalrpop自己写一个吧，但是 lex 是自己写的
+<del><a href=https://github.com/maxmindlin/openfga-dsl-parser>https://github.com/maxmindlin/openfga-dsl-parser</a>
+<a href=https://github.com/iammathew/openfga-rs>https://github.com/iammathew/openfga-rs</a></del>
+<a href=https://github.com/lalrpop/lalrpop>https://github.com/lalrpop/lalrpop</a></li><li>通讯协议 HTTP
+<del><a href=https://github.com/actix/actix>https://github.com/actix/actix</a></del> 不熟
+<a href=https://github.com/tokio-rs/axum>https://github.com/tokio-rs/axum</a> greptimedb 在用这个，感觉他的代码写的很好，可以借鉴部分设计</li><li>通讯协议GRPC， 需要自己写lb：https://github.com/yoogoc/tonic-lb (发布两天竟然有260+下载量，虽然可能是镜像站或机器人下载的，但还是超级开心)
+<a href=https://github.com/hyperium/tonic>https://github.com/hyperium/tonic</a></li><li>ORM/db mapping
+<del><a href=https://github.com/launchbadge/sqlx>https://github.com/launchbadge/sqlx</a></del> sqlx 过于底层，不方便 quey 和 migration
+<a href=https://github.com/SeaQL/sea-orm>https://github.com/SeaQL/sea-orm</a> 作为一个有 rails 情怀的开发者，看着它的使用习惯和 rails 差不多</li><li>表达式引擎：选择了一个脚本语言，而不是传统的表达式计算引擎，在 rust 现有生态里，只有一个https://github.com/ISibboI/evalexpr 看起来还不错，但是支持的类型太少了，而且在 eval 的代码是类型硬编码，不好拓展，不想花太长时间来捣鼓，然后就找到了 rhai，因为他的 about 就是:”Rhai - An embedded scripting language for Rust.”，那就看看他的魔法吧
+<a href=https://github.com/rhaiscript/rhai>https://github.com/rhaiscript/rhai</a></li></ol><h2 id=数据库表设计>数据库表设计</h2><h3 id=没加表达式引擎之前的设计>没加表达式引擎之前的设计</h3><p>relation_tuples(id, tenant_id, model_id, object_type, object_id, relation, user_type, user_id, user_relation)</p><p>authz_models(id, tenant_id, model)</p><p>tenants(id, name)</p><h3 id=加表达式引擎之后的设计>加表达式引擎之后的设计</h3><p>有三种可选的设计：</p><ol><li>直接把 attributes 加入relation_tuples里的字段：relation_tuples(id, tenant_id, model_id, object_type, object_id, relation, user_type, user_id, user_relation, attributes)</li><li>单独建一张表，但把attributes作为一个字段存：tuple_attributes(id, tuple_id, attributes)</li><li>单独建一张表，把 attribute 打平：tuple_attributes(id, tuple_id, key, value)，但如果value 是 json 字段，那这种设计就画蛇添足了，除非这样tuple_attributes(id, tuple_id, key, key_type, value)加一个 key_type 来区分类型但这样也解决不了数组问题</li></ol><p>综上所述，还是第一种办法简单粗暴</p><h2 id=回顾permify-check流程>回顾permify check流程</h2><p>请求：</p><pre><code class=language-rust>{
+  &quot;metadata&quot;: {
+    &quot;schema_version&quot;: &quot;&quot;,
+    &quot;snap_token&quot;: &quot;&quot;,
+    &quot;depth&quot;: 20
+  },
+  &quot;entity&quot;: {
+    &quot;type&quot;: &quot;organization&quot;,
+    &quot;id&quot;: &quot;1&quot;
+  },
+  &quot;permission&quot;: &quot;delete_files&quot;,
+  &quot;subject&quot;: {
+    &quot;type&quot;: &quot;user&quot;,
+    &quot;id&quot;: &quot;1&quot;,
+    &quot;relation&quot;: &quot;&quot;
+  }
+}
+</code></pre><ol><li>获取实体定义</li></ol><pre><code class=language-rust>entity organization {
+	relation admin @user
+	relation member @user
+
+	permission view_files = (admin or member)
+	permission edit_files = admin
+	permission delete_files = admin
+}
+</code></pre><ol><li>进入checkLeaf->checkComputedUserSet</li><li>转化请求</li></ol><pre><code class=language-rust>{
+  &quot;metadata&quot;: {
+    &quot;schema_version&quot;: &quot;&quot;,
+    &quot;snap_token&quot;: &quot;&quot;,
+    &quot;depth&quot;: 20
+  },
+  &quot;entity&quot;: {
+    &quot;type&quot;: &quot;organization&quot;,
+    &quot;id&quot;: &quot;1&quot;
+  },
+  &quot;permission&quot;: &quot;admin&quot;,
+  &quot;subject&quot;: {
+    &quot;type&quot;: &quot;user&quot;,
+    &quot;id&quot;: &quot;1&quot;,
+    &quot;relation&quot;: &quot;&quot;
+  }
+}
+</code></pre><ol><li>进入checkDirectRelation，校验权限</li></ol><pre><code class=language-rust>SELECT
+	entity_type,
+	entity_id,
+	relation,
+	subject_type,
+	subject_id,
+	subject_relation
+FROM
+	relation_tuples
+WHERE
+	tenant_id = 't1'
+	AND entity_id IN ( '*','1' )
+	AND entity_type = 'organization'
+	AND relation = 'admin'
+	AND ( pg_visible_in_snapshot ( created_tx_id, ( SELECT snapshot FROM transactions WHERE ID = '100090072' :: xid8 ) ) = TRUE OR created_tx_id = '100090072' :: xid8 )
+	AND (
+		( pg_visible_in_snapshot ( expired_tx_id, ( SELECT snapshot FROM transactions WHERE ID = '100090072' :: xid8 ) ) = FALSE OR expired_tx_id = '0' :: xid8 )
+	AND expired_tx_id &lt;&gt; '100090072' :: xid8
+	)
+</code></pre><ol><li>遍历元组集</li><li>如果subject_type + subject_id == subject,则返回允许</li><li>进一步转化请求,</li></ol><pre><code class=language-rust>{
+  &quot;metadata&quot;: {
+    &quot;schema_version&quot;: &quot;&quot;,
+    &quot;snap_token&quot;: &quot;&quot;,
+    &quot;depth&quot;: 20
+  },
+  &quot;entity&quot;: {
+    &quot;type&quot;: &quot;##subject_type&quot;,
+    &quot;id&quot;: &quot;##subject_id&quot;
+  },
+  &quot;permission&quot;: &quot;##subject_relation&quot;,
+  &quot;subject&quot;: {
+    &quot;type&quot;: &quot;user&quot;,
+    &quot;id&quot;: &quot;1&quot;,
+    &quot;relation&quot;: &quot;&quot;
+  }
+}
+</code></pre><h1 id=模块设计>模块设计</h1><h2 id=check>check</h2><p>核心检查器，定义检查器接口，有四种实现，分别为：</p><ol><li>local(执行检查任务)，</li><li>cache(缓存检查结果),</li><li>remote(远程lb检查，由local分解tuple内容，然后分发至remote执行)，</li><li>cycle(环形tuple检测)</li></ol><h3 id=local-check检查流程>local check检查流程</h3><p><img src=/images/zanzibar_check.png alt="zanzibar check流程.png"></p><p>假设授权模型</p><pre><code class=language-jsx>type user {}
+type group {
+  relation member: user
+}
+type folder {
+  relation parent: folder
+  relation viewer: user | group#member
+  permission can_view: viewer | parent#can_view
+}
+</code></pre><p>预设关系元组</p><pre><code class=language-jsx>group:1 member user:1
+folder:1 viewer group:1#member
+</code></pre><p>预设请求 1</p><pre><code class=language-jsx>folder:1 viewer user:1
+</code></pre><p>说明</p><ol><li>当一个请求进来以后，先找到 授权模型，并将其转化为 typesystem，方便 checker 后续使用</li><li>首先根据 tuple中的 object_type 和 relation 找到 rewrite 规则：this,compute,ttu</li><li>在预设请求 1 中，得到的 rewrite 为：this</li></ol><h2 id=storage>storage</h2><p>提供存储服务，包括:</p><ol><li>tuple读写，</li><li>authz model读写，</li><li>tenant读写</li></ol><h2 id=server>server</h2><p>提供http服务和grpc服务，提供的接口：</p><p>Zanzibar的接口</p><ol><li>read</li><li>write</li><li>watch：暂不实现</li><li>check</li><li>expand</li></ol><p>权限模型crud接口</p><p>租户crud接口</p><p>考虑抽象api通用层，http和grpc都是用api来提供服务</p><h1 id=authz-model>authz model</h1><p>权限模型的定义，dsl写法目前先参考openfga</p><p>后续优化模型</p><h1 id=现有实现的缺陷>现有实现的缺陷</h1><h2 id=openfga>openfga</h2><ol><li>不能解决管理员问题，即用户x拥有所有doc的某种relation</li><li>数据库定义没有将object_type,object_id,relation,user_type,user_id,user_relation区分，导致代码有很多不必要的判断和切分</li><li>没有实现Leopard Indexing System，没有watch</li></ol><h2 id=permify>permify</h2><ol><li>不能解决管理员问题，即用户x拥有所有doc的某种relation</li><li>schema定义的relation需要区分relation/action</li><li>schema不能转译成 json，下游应用很难写维护页面</li><li>没有实现Leopard Indexing System，watch功能使用应用程序实现，而不是从数据库提供</li></ol><h1 id=展开objects>展开objects</h1><pre><code class=language-c>objects({ot=folder, r=view, ut=user, ui=1})
+</code></pre><p>找到相应relation</p><pre><code class=language-c>user
+group { member: user }
+folder {
+	viewer:	user | group#member
+	parent: folder
+	view: viewer | parent#view
+}
+</code></pre><h2 id=direct--direct_objects>direct → direct_objects</h2><h3 id=1-类型相同>1. 类型相同</h3><pre><code class=language-c>select * from tuple where ot = folder and r = viewer and ut = user and ui = '1'
+</code></pre><h3 id=2-类型不同无-user_relation-continue>2. 类型不同，无 user_relation, continue</h3><h3 id=3-类型不同存在-user_relation>3. 类型不同，存在 user_relation</h3><ol><li>判断这个 object是否存在 user 关系</li><li>如果存在</li></ol><pre><code class=language-c>mid_object_ids = self.direct_objects({ot=group, r=member, ut=user, ui=1})
+object_ids = select * from tuple
+	where ot = folder and r = viewer and ut = group and ui in mid_object_ids
+</code></pre><h2 id=computed>computed</h2><pre><code class=language-c>// source: objects({ot=folder, r=view, ut=user, ui=1})
+objects({ot=folder, r=viewer, ut=user, ui=1})
+</code></pre><h2 id=tuple-to-userset>tuple to userset</h2><pre><code class=language-c>// source: objects({ot=folder, r=view, ut=user, ui=1})
+mid_object_ids = self.direct_objects({ot=folder, r=view, ut=user, ui=1})
+object_ids = select * from tuple
+	where ot = folder and r = parent and ut = folder and ui in mid_object_ids
+</code></pre><p>展开users 类似，就不再冗余介绍了</p></div><div class=article-footer><blockquote class=mt-2x><ul class="post-copyright list-unstyled"><li class="post-copyright-link hidden-xs"><strong>本文链接: </strong><a href=https://blog.yoogo.top/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/ title=fga-rs实现笔记 target=_blank rel=external>https://blog.yoogo.top/2024/04/fga-rs%E5%AE%9E%E7%8E%B0%E7%AC%94%E8%AE%B0/</a></li><li class=post-copyright-license><strong>License: </strong><a href=http://creativecommons.org/licenses/by/4.0/deed.zh target=_blank rel=external>CC BY 4.0 CN</a></li></ul></blockquote><div class="panel panel-default panel-badger"><div class=panel-body><figure class=media><div class=media-left><a href=https://github.com/yoogoc target=_blank class="img-burn thumb-sm visible-lg"><img src=https://blog.yoogo.top/sites-images/Avatar200.png class="img-rounded w-full" alt></a></div><div class=media-body><h3 class=media-heading><a href=https://github.com/yoogoc target=_blank><span class=text-dark>yoogo</span><small class=ml-1x></small></a></h3><div>Those who cannot remember the past are condemned to repeat it.</div></div></figure></div></div></div></article><section id=comments><div class=giscus><script src=https://giscus.app/client.js data-repo=YoogoC/yoogoc.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzNjExOTQ5ODk=" data-category=Announcements data-category-id=DIC_kwDOFYdl7c4COzVn data-mapping=og:title data-reactions-enabled=1 data-theme=light data-lang=zh-CN crossorigin=anonymous async></script><noscript>Please enable JavaScript to view the comments powered by giscus.</noscript></section></div><nav class="bar bar-footer clearfix" data-stick-bottom><div class=bar-inner><ul class="pager pull-left"><li class=prev><a href=https://blog.yoogo.top/2023/12/rebac%E4%BB%8B%E7%BB%8D%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/ title=rebac/zanzibar介绍、实现及应用><i class="icon icon-angle-left" aria-hidden=true></i><span>&nbsp;&nbsp;下一篇</span></a></li><li class=toggle-toc><a class="toggle-btn collapsed" data-toggle=collapse href=#collapseToc aria-expanded=false title=文章目录 role=button><span>[&nbsp;</span><span>文章目录</span>
+<i class="text-collapsed icon icon-anchor"></i>
+<i class="text-in icon icon-close"></i>
+<span>]</span></a></li></ul><div class=bar-right><div class=share-component data-sites=weibo,qq,wechat,facebook,twitter data-mobile-sites=weibo,qq,qzone></div></div></div></nav></main><footer class=footer itemscope itemtype=http://schema.org/WPFooter><ul class=social-links><li><a href=https://github.com/yoogoc target=_blank title=github data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li><li><a href=https://blog.yoogo.top/index.xml target=_blank title=rss data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li></ul><div class=copyright>&copy;2018 -
+2024<div class=publishby>Theme by <a href=https://github.com/xiaoheiAh target=_blank>xiaoheiAh </a>base on<a href=https://github.com/xiaoheiAh/hugo-theme-pure target=_blank> pure</a>.</div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script><script type=text/x-mathjax-config>
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script><script src=https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js></script><script>window.jQuery||document.write('<script src="js/jquery.min.js"><\/script>')</script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js defer></script><script type=text/javascript src=https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js defer></script><script>hljs.configure({tabReplace:"    ",classPrefix:""}),hljs.initHighlightingOnLoad()</script><script src=https://blog.yoogo.top/js/application.min.e4989ab4dc212027af8773861b05b6bc333a1217f6b0a1b3377a3a3dbd454483.js></script><script src=https://blog.yoogo.top/js/plugin.min.ee01f0915da127c8f127f6384fd08c677a9a87f16e6b265d282abf291b5065d9.js></script><script>(function(e){var t={TRANSLATION:{POSTS:"文章",PAGES:"页面",CATEGORIES:"分类",TAGS:"标签",UNTITLED:"(未命名)"},ROOT_URL:"https://blog.yoogo.top/",CONTENT_URL:"https://blog.yoogo.top//searchindex.json "};e.INSIGHT_CONFIG=t})(window)</script><script type=text/javascript src=https://blog.yoogo.top/js/insight.min.716b0c6a00b68ccc31a2b65345f3412f4246ffa94a90f8e25d525528b4504f9937880692bbe619023233caba5d0a17ebe23d7cfb57cd3a88f23ea337ad5e4d00.js defer></script><script src=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js></script><script>tocbot.init({tocSelector:".js-toc",contentSelector:".js-toc-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0})</script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js></script><script type=text/javascript src=/js/opt-mermaid.js></script><script id=LA_COLLECT src=//sdk.51.la/js-sdk-pro.min.js></script><script>LA.init({id:"JVnj1Z6jp0t62WHS",ck:"JVnj1Z6jp0t62WHS"})</script></body></html>
