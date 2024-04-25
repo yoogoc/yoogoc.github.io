@@ -16,7 +16,7 @@ author = "Hugo Authors"
 
 我的`.gitconfig`
 
-```
+```toml
 [user]
   name = yoogo
   email = yoogoc@163.com
@@ -45,7 +45,7 @@ author = "Hugo Authors"
   excludesfile = ~/.gitignore_global
   ignorecase = false
 [log]
-	date = iso
+  date = iso
 [merge]
   conflictstyle = diff3
 [diff]
@@ -63,10 +63,10 @@ author = "Hugo Authors"
   proxy = http://127.0.0.1:7890
 
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 ```
 
 我的`wezterm.lua`
